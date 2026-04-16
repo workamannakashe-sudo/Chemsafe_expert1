@@ -393,9 +393,16 @@ export default function App() {
 
       {/* Warning if API Key is missing */}
       {!process.env.GEMINI_API_KEY && (
-        <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center gap-3 text-rose-400">
-          <AlertTriangle className="w-5 h-5 shrink-0" />
-          <p className="text-xs font-bold uppercase tracking-wider">API KEY MISSING: Enterprise features disabled</p>
+        <div className="mb-6 p-5 rounded-3xl bg-rose-500/10 border border-rose-500/20 flex flex-col md:flex-row items-start md:items-center gap-4 text-rose-400">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-6 h-6 shrink-0" />
+            <p className="text-sm font-bold uppercase tracking-wider">AI Intelligence Offline</p>
+          </div>
+          <div className="flex-1">
+            <p className="text-xs leading-relaxed">
+              Gemini API Key is required for product analysis. Please add <code className="bg-rose-500/20 px-1.5 py-0.5 rounded text-white font-mono">GEMINI_API_KEY</code> in the <strong>Settings &gt; Secrets</strong> menu of AI Studio, then restart the preview.
+            </p>
+          </div>
         </div>
       )}
 
