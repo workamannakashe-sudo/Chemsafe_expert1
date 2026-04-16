@@ -1,7 +1,13 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { ProductAnalysis, BrandIntelligence, ChemicalInfo } from "../types";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.USER_GEMINI_KEY || process.env.GEMINI_API_KEY;
+
+if (GEMINI_API_KEY) {
+  console.log("Gemini API: Key detected (from " + (process.env.USER_GEMINI_KEY ? "USER_GEMINI_KEY" : "GEMINI_API_KEY") + "), initializing engine...");
+} else {
+  console.warn("Gemini API: No key detected. Intelligence engine will be unavailable.");
+}
 
 const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 

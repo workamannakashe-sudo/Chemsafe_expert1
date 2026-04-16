@@ -65,6 +65,9 @@ export default function App() {
     }
   };
 
+  const isApiKeyMissing = (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'undefined' || process.env.GEMINI_API_KEY === '') && 
+                        (!process.env.USER_GEMINI_KEY || process.env.USER_GEMINI_KEY === 'undefined' || process.env.USER_GEMINI_KEY === '');
+
   // Ensure theme is applied on mount
   React.useEffect(() => {
     if (theme === 'light') {
@@ -438,16 +441,19 @@ export default function App() {
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
-          <div className="bg-brand-emerald/10 border border-brand-emerald/30 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-[12px] font-bold text-brand-emerald flex items-center gap-2">
-            <div className="w-2 h-2 bg-brand-emerald rounded-full animate-pulse" />
-            <span className="hidden sm:inline">GEMINI 3.1 FLASH CONNECTED</span>
-            <span className="sm:hidden uppercase tracking-widest">Connected</span>
+          <div className={cn(
+            "px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-[12px] font-bold flex items-center gap-2",
+            isApiKeyMissing ? "bg-amber-500/10 border-amber-500/30 text-amber-500" : "bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald"
+          )}>
+            <div className={cn("w-2 h-2 rounded-full animate-pulse", isApiKeyMissing ? "bg-amber-500" : "bg-brand-emerald")} />
+            <span className="hidden sm:inline">{isApiKeyMissing ? 'INTELLIGENCE OFFLINE' : 'GEMINI 3.1 FLASH CONNECTED'}</span>
+            <span className="sm:hidden uppercase tracking-widest">{isApiKeyMissing ? 'OFFLINE' : 'Connected'}</span>
           </div>
         </div>
       </header>
 
       {/* Warning if API Key is missing */}
-      {!process.env.GEMINI_API_KEY && (
+      {isApiKeyMissing && (
         <div className="mb-6 p-5 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex flex-col md:flex-row items-start md:items-center gap-4 text-amber-400">
           <div className="flex items-center gap-3">
             <AlertTriangle className="w-6 h-6 shrink-0" />
@@ -456,8 +462,8 @@ export default function App() {
           <div className="flex-1">
             <p className="text-xs leading-relaxed">
               Real-time API is offline. {isDemoMode ? "Currently running in " : "Please add "}
-              <code className="bg-amber-500/20 px-1.5 py-0.5 rounded text-white font-mono">GEMINI_API_KEY</code>
-              {isDemoMode ? " DEMO MODE" : " to your Secrets panel to enable real analysis."}
+              <code className="bg-amber-500/20 px-1.5 py-0.5 rounded text-white font-mono">USER_GEMINI_KEY</code>
+              {isDemoMode ? " DEMO MODE" : " to your Secrets panel (since GEMINI_API_KEY is reserved)."}
             </p>
           </div>
           <button 
