@@ -44,6 +44,7 @@ export default function App() {
   const [registrySearchQuery, setRegistrySearchQuery] = useState('');
   const [result, setResult] = useState<ProductAnalysis | ChemicalInfo | BrandIntelligence | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isDemoMode, setIsDemoMode] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
@@ -144,6 +145,21 @@ export default function App() {
     setResult(null);
 
     try {
+      if (isDemoMode) {
+        await new Promise(r => setTimeout(r, 1500));
+        setResult({
+          productName: "Simulated Ingredient Analysis",
+          brandName: "Demo Brand",
+          overallStatus: "CAUTION" as SafetyStatus,
+          summary: "This is a simulated result. In a real environment, the AI would perform OCR and analyze the ingredients from your photo.",
+          ingredients: [
+            { name: "Sodium Laureth Sulfate", explanation: "Cleansing agent. May cause irritation.", status: "CAUTION" as SafetyStatus, healthHazards: ["Skin irritation"] },
+            { name: "Aqua", explanation: "Pure water base.", status: "SAFE" as SafetyStatus, benefits: ["Hydration"] }
+          ]
+        });
+        stopCamera();
+        return;
+      }
       const analysis = await analyzeIngredients(base64);
       setResult(analysis);
       stopCamera(); // Close camera after successful scan
@@ -166,6 +182,19 @@ export default function App() {
     reader.onload = async () => {
       const base64 = (reader.result as string).split(',')[1];
       try {
+        if (isDemoMode) {
+          await new Promise(r => setTimeout(r, 1200));
+          setResult({
+            productName: "Uploaded Document Demo",
+            brandName: "Local Import",
+            overallStatus: "SAFE" as SafetyStatus,
+            summary: "Simulated analysis complete. Real-world analysis requires a valid Gemini API key.",
+            ingredients: [
+              { name: "Glycerin", explanation: "Humectant. Highly safe.", status: "SAFE" as SafetyStatus, benefits: ["Moisturizing"] }
+            ]
+          });
+          return;
+        }
         const analysis = await analyzeIngredients(base64);
         setResult(analysis);
       } catch (err) {
@@ -186,6 +215,18 @@ export default function App() {
     setResult(null);
 
     try {
+      if (isDemoMode) {
+        await new Promise(r => setTimeout(r, 1000));
+        setResult({
+          brandName: query,
+          reputationStatus: "SAFE",
+          summary: `This is simulated brand data for "${query}". real brand intelligence requires an active API key.`,
+          recallHistory: [],
+          manufacturingStandards: "Simulated high standards",
+          ingredients: []
+        } as BrandIntelligence);
+        return;
+      }
       const trendingBrands = ['Nestlé', 'Unilever', 'P&G', 'Johnson & Johnson', 'Coca-Cola', 'Nestle'];
       if (trendingBrands.some(b => query.toLowerCase().includes(b.toLowerCase()))) {
         const intelligence = await getBrandIntelligence(query);
@@ -210,6 +251,20 @@ export default function App() {
     setResult(null);
 
     try {
+      if (isDemoMode) {
+        await new Promise(r => setTimeout(r, 800));
+        setResult({
+          name: query,
+          safetyVerdict: "SAFE",
+          explanation: "Simulated safety explanation for the chemical registry.",
+          formula: "Demo-CxHy",
+          hazards: ["None identified in demo"],
+          benefits: ["Simulation active"],
+          commonUses: ["Demo usage"],
+          regulations: "Demo regulations"
+        } as ChemicalInfo);
+        return;
+      }
       const info = await searchChemical(query);
       setResult(info);
     } catch (err) {
@@ -393,16 +448,27 @@ export default function App() {
 
       {/* Warning if API Key is missing */}
       {!process.env.GEMINI_API_KEY && (
-        <div className="mb-6 p-5 rounded-3xl bg-rose-500/10 border border-rose-500/20 flex flex-col md:flex-row items-start md:items-center gap-4 text-rose-400">
+        <div className="mb-6 p-5 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex flex-col md:flex-row items-start md:items-center gap-4 text-amber-400">
           <div className="flex items-center gap-3">
             <AlertTriangle className="w-6 h-6 shrink-0" />
-            <p className="text-sm font-bold uppercase tracking-wider">AI Intelligence Offline</p>
+            <p className="text-sm font-bold uppercase tracking-wider">Intelligence Sandbox</p>
           </div>
           <div className="flex-1">
             <p className="text-xs leading-relaxed">
-              Gemini API Key is required for product analysis. Please add <code className="bg-rose-500/20 px-1.5 py-0.5 rounded text-white font-mono">GEMINI_API_KEY</code> in the <strong>Settings &gt; Secrets</strong> menu of AI Studio, then restart the preview.
+              Real-time API is offline. {isDemoMode ? "Currently running in " : "Please add "}
+              <code className="bg-amber-500/20 px-1.5 py-0.5 rounded text-white font-mono">GEMINI_API_KEY</code>
+              {isDemoMode ? " DEMO MODE" : " to your Secrets panel to enable real analysis."}
             </p>
           </div>
+          <button 
+            onClick={() => setIsDemoMode(!isDemoMode)}
+            className={cn(
+              "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
+              isDemoMode ? "bg-amber-500 text-black" : "bg-white/10 hover:bg-white/20 text-white"
+            )}
+          >
+            {isDemoMode ? "DISABLE DEMO" : "ENABLE DEMO MODE"}
+          </button>
         </div>
       )}
 
