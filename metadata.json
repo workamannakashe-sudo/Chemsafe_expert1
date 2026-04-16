@@ -1,0 +1,8 @@
+{
+  "name": "ChemSafe Expert",
+  "description": "Professional Chemical Safety Scanner and Brand Intelligence platform. Analyze product ingredients, check chemical registries, and evaluate brand safety with AI.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}

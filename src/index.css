@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-emerald: #34d399;
+  --color-brand-emerald-light: #6ee7b7;
+  --color-brand-emerald-dark: #059669;
+  --color-brand-emerald-900: #064e3b;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+
+  --radius-48px: 48px;
+
+  --color-bg-base: #020617;
+  --color-text-base: #ffffff;
+  --color-card-bg: rgba(255, 255, 255, 0.08);
+  --color-card-border: rgba(255, 255, 255, 0.15);
+  --color-dim: #94a3b8;
+  --color-inner-bg: rgba(255, 255, 255, 0.05);
+}
+
+:root {
+  --bg-dots: rgba(255, 255, 255, 0.05);
+}
+
+:root.light {
+  --color-bg-base: #f8fafc;
+  --color-text-base: #0f172a;
+  --color-card-bg: #ffffff;
+  --color-card-border: rgba(0, 0, 0, 0.08);
+  --color-dim: #64748b;
+  --color-inner-bg: #f1f5f9;
+  --bg-dots: rgba(15, 23, 42, 0.05);
+}
+
+@layer utilities {
+  .text-dim {
+    color: var(--color-dim);
+  }
+
+  .bg-inner {
+    background-color: var(--color-inner-bg);
+  }
+
+  .border-inner {
+    border-color: var(--color-card-border);
+  }
+
+  .bento-card {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    @apply rounded-[28px] md:rounded-[48px] p-5 md:p-8 relative overflow-hidden transition-all duration-300;
+  }
+
+  .bento-card-active {
+    @apply border-brand-emerald shadow-[0_0_30px_rgba(52,211,153,0.15)];
+  }
+
+  .label-tiny {
+    @apply uppercase text-[10px] tracking-[0.1em] text-[#94a3b8] mb-2 block font-bold;
+  }
+}
+
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-base);
+  @apply min-h-screen font-sans transition-colors duration-300;
+  background-image: radial-gradient(circle at 2px 2px, var(--bg-dots) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+@keyframes scan {
+  0% { top: 0% }
+  100% { top: 100% }
+}
+
+.animate-scan {
+  animation: scan 2s linear infinite;
+}
