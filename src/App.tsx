@@ -446,7 +446,7 @@ export default function App() {
             isApiKeyMissing ? "bg-amber-500/10 border-amber-500/30 text-amber-500" : "bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald"
           )}>
             <div className={cn("w-2 h-2 rounded-full animate-pulse", isApiKeyMissing ? "bg-amber-500" : "bg-brand-emerald")} />
-            <span className="hidden sm:inline">{isApiKeyMissing ? 'INTELLIGENCE OFFLINE' : 'GEMINI 3.1 FLASH CONNECTED'}</span>
+            <span className="hidden sm:inline">{isApiKeyMissing ? 'INTELLIGENCE OFFLINE' : 'GEMINI 1.5 FLASH CONNECTED'}</span>
             <span className="sm:hidden uppercase tracking-widest">{isApiKeyMissing ? 'OFFLINE' : 'Connected'}</span>
           </div>
         </div>

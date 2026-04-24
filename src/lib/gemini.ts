@@ -93,7 +93,7 @@ export async function analyzeIngredients(base64Image: string): Promise<ProductAn
 
   return retryWithBackoff(async () => {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: [
         {
           parts: [
@@ -131,7 +131,7 @@ export async function searchChemical(query: string): Promise<ChemicalInfo> {
 
   return retryWithBackoff(async () => {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -160,7 +160,7 @@ export async function getBrandIntelligence(brand: string): Promise<BrandIntellig
 
   return retryWithBackoff(async () => {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
