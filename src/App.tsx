@@ -463,7 +463,7 @@ export default function App() {
             <p className="text-xs leading-relaxed">
               Real-time API is offline. {isDemoMode ? "Currently running in " : "Please add "}
               <code className="bg-amber-500/20 px-1.5 py-0.5 rounded text-white font-mono">USER_GEMINI_KEY</code>
-              {isDemoMode ? " DEMO MODE" : " to your Secrets panel (since GEMINI_API_KEY is reserved)."}
+              {isDemoMode ? " DEMO MODE" : " to your environment variables."}
             </p>
           </div>
           <button 
