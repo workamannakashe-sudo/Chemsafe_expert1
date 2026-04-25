@@ -2,7 +2,22 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { ProductAnalysis, BrandIntelligence, ChemicalInfo } from "../types";
 
 export function getApiKey(): string | null {
-  return import.meta.env?.VITE_USER_GEMINI_KEY || import.meta.env?.VITE_GEMINI_API_KEY || localStorage.getItem('gemini_api_key');
+  let envKey = null;
+  try {
+    // Try Vite's import.meta.env
+    envKey = import.meta.env.VITE_USER_GEMINI_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+  } catch (e) {
+    // Fallback for environments where import.meta.env is undefined
+  }
+  
+  if (!envKey) {
+    try {
+      // Try process.env if defined (e.g. via vite config define)
+      envKey = process.env.USER_GEMINI_KEY || process.env.GEMINI_API_KEY;
+    } catch (e) {}
+  }
+  
+  return envKey || localStorage.getItem('gemini_api_key');
 }
 
 let ai: GoogleGenAI | null = null;
@@ -38,14 +53,14 @@ const cache = {
 // Error categorization helper
 function handleAiError(error: any): never {
   console.error("Gemini API Error:", error);
-  
+
   const message = error?.message || String(error);
-  
+
   // Categorize based on common GenAI error patterns
   if (message.includes("API_KEY_INVALID") || message.includes("401") || message.includes("403")) {
     throw new Error("Invalid Gemini API Key. Please check your AI Studio secrets configuration.");
   }
-  
+
   if (message.includes("429") || message.includes("quota") || message.includes("Rate limit")) {
     throw new Error("AI capacity reached. Please wait a moment before trying again (Rate limited).");
   }
@@ -80,7 +95,7 @@ async function retryWithBackoff<T>(fn: () => Promise<T>, retries = 3, initialDel
     }
 
     if (retries === 0) handleAiError(error);
-    
+
     await new Promise(resolve => setTimeout(resolve, initialDelay));
     return retryWithBackoff(fn, retries - 1, initialDelay * 2);
   }

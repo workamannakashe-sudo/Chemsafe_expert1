@@ -19,7 +19,8 @@ import {
   Sun,
   Moon,
   Settings,
-  Key
+  Key,
+  Leaf
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import { ScannerOverlay } from './components/ScannerOverlay';
@@ -319,7 +320,7 @@ export default function App() {
           <div className="space-y-3">
             <h4 className="label-tiny">Ingredient Analysis</h4>
             <div className="grid gap-2">
-              {data.ingredients.map((ing, idx) => (
+              {data.ingredients?.map((ing, idx) => (
                 <div key={idx} className="bg-inner p-4 rounded-xl space-y-2">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
@@ -369,7 +370,7 @@ export default function App() {
                 <Skull className="w-3 h-3" /> Health Hazards
               </h4>
               <ul className="space-y-1">
-                {data.hazards.map((h, i) => (
+                {data.hazards?.map((h, i) => (
                   <li key={i} className="text-dim text-[11px] flex gap-2">
                     <span className="text-rose-500">•</span> {h}
                   </li>
@@ -418,7 +419,7 @@ export default function App() {
               <History className="w-3 h-3" /> Recalls
             </h4>
             <div className="grid gap-2">
-              {data.recallHistory.length > 0 ? data.recallHistory.map((h, i) => (
+              {data.recallHistory?.length > 0 ? data.recallHistory.map((h, i) => (
                 <div key={i} className="bg-white/5 py-2 px-3 rounded-lg text-[11px] border-l-2 border-rose-500">
                   {h}
                 </div>
