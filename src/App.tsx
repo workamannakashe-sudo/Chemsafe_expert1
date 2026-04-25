@@ -39,6 +39,19 @@ import {
 } from './types';
 
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
+
 export default function App() {
   const [isScanning, setIsScanning] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -436,7 +449,10 @@ export default function App() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-10 relative min-h-screen flex flex-col">
+    <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-10 relative min-h-screen flex flex-col z-0">
+      {/* Ambient Background Glow */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-emerald/15 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-glow" />
+      
       {/* Header */}
       <header className="mb-8 flex justify-between items-center">
         <div className="flex items-center gap-3">
@@ -509,10 +525,15 @@ export default function App() {
       )}
 
       {/* Main Bento Grid */}
-      <main className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-5 flex-1 min-h-0">
+      <motion.main 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-5 flex-1 min-h-0"
+      >
         
         {/* Scanner Section - Spans 2 rows */}
-        <div className={cn(
+        <motion.div variants={itemVariants} className={cn(
           "bento-card scanner-view lg:row-span-2 border-2 bg-black flex flex-col justify-between p-0 overflow-hidden relative min-h-[400px] sm:min-h-[500px] lg:min-h-0 aspect-[4/5] md:aspect-auto",
           isCameraActive ? "border-brand-emerald/60 shadow-[0_0_40px_rgba(52,211,153,0.1)]" : "border-brand-emerald/40"
         )}>
@@ -599,43 +620,51 @@ export default function App() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => fileInputRef.current?.click()}
-                  className="bg-white/5 border border-white/10 text-white p-4 rounded-2xl hover:bg-white/10 transition-all active:scale-95"
+                  className="bg-white/5 border border-white/10 text-white p-4 rounded-2xl hover:bg-white/10 transition-colors"
                   title="Upload image"
                 >
                   <Upload className="w-6 h-6" />
-                </button>
+                </motion.button>
                 {isCameraActive ? (
-                  <button 
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={takePhoto}
-                    className="bg-brand-emerald text-black p-4 rounded-2xl hover:bg-brand-emerald-light transition-all active:scale-95 shadow-[0_0_20px_rgba(52,211,153,0.4)]"
+                    className="bg-brand-emerald text-black p-4 rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]"
                     title="Capture photo"
                   >
                     <Scan className="w-6 h-6" />
-                  </button>
+                  </motion.button>
                 ) : (
-                  <button 
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={startCamera}
-                    className="bg-brand-emerald text-black p-4 rounded-2xl hover:bg-brand-emerald-light transition-all active:scale-95 shadow-[0_0_20px_rgba(52,211,153,0.4)]"
+                    className="bg-brand-emerald text-black p-4 rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]"
                     title="Start camera"
                   >
                     <Camera className="w-6 h-6" />
-                  </button>
+                  </motion.button>
                 )}
                 {isCameraActive && (
-                  <button 
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={stopCamera}
-                    className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-4 rounded-2xl hover:bg-rose-500/20 transition-all active:scale-95"
+                    className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-4 rounded-2xl hover:bg-rose-500/20 transition-colors"
                     title="Stop camera"
                   >
                     <X className="w-6 h-6" />
-                  </button>
+                  </motion.button>
                 )}
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Global Overlays */}
         <AnimatePresence>
@@ -674,7 +703,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* Search & Trending Section */}
-        <div className="bento-card search-section flex flex-col gap-5">
+        <motion.div variants={itemVariants} className="bento-card search-section flex flex-col gap-5">
           <div>
             <span className="label-tiny">Intelligence Search</span>
             <div className="relative group">
@@ -713,10 +742,10 @@ export default function App() {
             <p className="text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1">API Status</p>
             <p className="text-[11px] text-amber-200/70 leading-tight">Enterprise tier active. 100k+ registry queries available.</p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Registry Stats / Results Section */}
-        <div className="bento-card flex flex-col gap-4">
+        <motion.div variants={itemVariants} className="bento-card flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <span className="label-tiny m-0">Global Registry</span>
             {result && (
@@ -789,9 +818,9 @@ export default function App() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
-      </main>
+      </motion.main>
 
       {/* Footer */}
       <footer className="mt-8 py-4 border-t border-white/5 flex justify-between items-center text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">

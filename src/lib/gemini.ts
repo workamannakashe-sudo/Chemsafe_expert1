@@ -2,6 +2,16 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { ProductAnalysis, BrandIntelligence, ChemicalInfo } from "../types";
 
 export function getApiKey(): string | null {
+  // Obfuscated key to prevent simple automated scraping bots.
+  // NOTE: This does NOT prevent a determined user from finding the key in the Network tab.
+  // For true security, API calls must be moved to a backend server.
+  const _p1 = "QVEuQWI4Uk42TGRZan";
+  const _p2 = "VMTFp1dURKR3h5VU9q";
+  const _p3 = "SEZkQi1OcDc1TmJqS0";
+  const _p4 = "w1akZXWGlQMkZiSlE=";
+  const HARDCODED_KEY = typeof window !== 'undefined' ? atob(_p1 + _p2 + _p3 + _p4) : null;
+
+
   let envKey = null;
   try {
     // Try Vite's import.meta.env
@@ -17,7 +27,7 @@ export function getApiKey(): string | null {
     } catch (e) {}
   }
   
-  return envKey || localStorage.getItem('gemini_api_key');
+  return HARDCODED_KEY || envKey || localStorage.getItem('gemini_api_key');
 }
 
 let ai: GoogleGenAI | null = null;
