@@ -627,28 +627,25 @@ export default function App() {
               </div>
             ) : null}
 
-            {isCameraActive && (
-              <motion.video 
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                initial={{ scale: 1.05, opacity: 0 }}
-                animate={{ 
-                  scale: [1.05, 1.07, 1.05],
-                  opacity: 1
-                }}
-                transition={{
-                  scale: {
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  },
-                  opacity: { duration: 0.5 }
-                }}
-                className="absolute inset-0 w-full h-full object-cover z-0"
-              />
-            )}
+<AnimatePresence>
+  {isCameraActive && (
+    <motion.video
+      key="camera"
+      ref={videoRef}
+      autoPlay
+      playsInline
+      muted
+      initial={{ scale: 1.05, opacity: 0 }}
+      animate={{ scale: [1.05, 1.07, 1.05], opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{
+        scale: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+        opacity: { duration: 0.5 },
+      }}
+      className="absolute inset-0 w-full h-full object-cover z-0"
+    />
+  )}
+</AnimatePresence>
             
             <ScannerOverlay active={isScanning} theme={theme} />
             
