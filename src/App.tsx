@@ -498,7 +498,7 @@ export default function App() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-10 relative min-h-screen flex flex-col z-0">
+    <div className="max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-10 relative h-[100dvh] md:h-auto md:min-h-screen flex flex-col z-0 overflow-hidden md:overflow-visible">
       {/* Ambient Background Glow */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-emerald/15 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-glow" />
       
@@ -578,12 +578,13 @@ export default function App() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-5 flex-1 min-h-0"
+        className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-4 md:gap-5 flex-1 min-h-0 overflow-y-auto lg:overflow-visible custom-scrollbar pb-10 md:pb-0"
       >
         
         {/* Scanner Section - Spans 2 rows */}
         <motion.div variants={itemVariants} className={cn(
-          "bento-card scanner-view lg:row-span-2 border-2 bg-black flex flex-col justify-between p-0 overflow-hidden relative min-h-[400px] sm:min-h-[500px] lg:min-h-0 aspect-[4/5] md:aspect-auto",
+          "bento-card scanner-view lg:row-span-2 border-2 bg-black flex-col justify-between p-0 overflow-hidden relative min-h-[40vh] md:min-h-[500px] lg:min-h-0 md:aspect-auto",
+          result ? "hidden lg:flex" : "flex",
           isCameraActive ? "border-brand-emerald/60 shadow-[0_0_40px_rgba(52,211,153,0.1)]" : "border-brand-emerald/40"
         )}>
           {/* Pulsing Border for Active Scan */}
@@ -752,7 +753,10 @@ export default function App() {
         </AnimatePresence>
 
         {/* Search & Trending Section */}
-        <motion.div variants={itemVariants} className="bento-card search-section flex flex-col gap-6">
+        <motion.div variants={itemVariants} className={cn(
+          "bento-card search-section flex-col gap-6",
+          result ? "hidden lg:flex" : "flex"
+        )}>
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="bg-brand-emerald/20 p-2 rounded-lg">
@@ -812,7 +816,10 @@ export default function App() {
         </motion.div>
 
         {/* Registry Stats / Results Section */}
-        <motion.div variants={itemVariants} className="bento-card flex flex-col gap-4 relative overflow-hidden">
+        <motion.div variants={itemVariants} className={cn(
+          "bento-card flex-col gap-4 relative overflow-hidden",
+          result ? "flex flex-1" : "flex"
+        )}>
           {/* Subtle background element for visual interest */}
           {result && <div className="absolute -top-32 -right-32 w-64 h-64 bg-brand-emerald/5 rounded-full blur-[60px] pointer-events-none" />}
 
