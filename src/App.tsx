@@ -366,7 +366,7 @@ export default function App() {
                       <p className={cn(
                         "font-bold text-sm truncate mb-1",
                         ing.status === 'CAUTION' ? "text-amber-400" :
-                        ing.status === 'DANGEROUS' ? "text-rose-400" : "text-white"
+                        ing.status === 'UNSAFE' ? "text-rose-400" : "text-white"
                       )}>{ing.name}</p>
                       <p className="text-[11px] text-dim leading-snug">{ing.explanation}</p>
                     </div>
@@ -410,12 +410,6 @@ export default function App() {
             </div>
             <SafetyBadge status={data.safetyVerdict} className="scale-110 origin-top-right" />
           </div>
-
-          {data.explanation && (
-            <div className="bg-white/5 border border-white/10 p-5 rounded-2xl shadow-inner">
-              <p className="text-dim text-sm leading-relaxed">{data.explanation}</p>
-            </div>
-          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-rose-500/5 border border-rose-500/10 p-5 rounded-2xl hover:border-rose-500/30 transition-colors">
