@@ -584,7 +584,7 @@ export default function App() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="flex flex-col gap-5 flex-1 min-h-0 overflow-y-auto"
+        className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-5 flex-1 min-h-0 overflow-y-auto"
       >
         
         {/* Scanner Section - Spans 2 rows */}
