@@ -578,12 +578,12 @@ export default function App() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] lg:grid-rows-[auto_1fr] gap-4 md:gap-5 flex-1 min-h-0 overflow-y-auto lg:overflow-hidden custom-scrollbar pb-10 lg:pb-0"
+        className="flex flex-col flex-1 min-h-0 overflow-hidden"
       >
         
         {/* Scanner Section - Spans 2 rows */}
         <motion.div variants={itemVariants} className={cn(
-          "bento-card scanner-view lg:row-span-2 border-2 bg-black flex-col justify-between p-0 overflow-hidden relative min-h-[40vh] lg:min-h-0 h-full",
+          "bento-card scanner-view lg:row-span-2 border-2 bg-black flex-col justify-between p-0 overflow-hidden relative h-full flex-1",
           result ? "hidden lg:flex" : "flex",
           isCameraActive ? "border-brand-emerald/60 shadow-[0_0_40px_rgba(52,211,153,0.1)]" : "border-brand-emerald/40"
         )}>
@@ -817,7 +817,7 @@ export default function App() {
 
         {/* Registry Stats / Results Section */}
         <motion.div variants={itemVariants} className={cn(
-          "bento-card flex-col gap-4 relative overflow-hidden min-h-0 h-full",
+          "bento-card flex-col gap-4 relative overflow-hidden min-h-0 h-full flex-1",
           result ? "flex flex-1" : "flex"
         )}>
           {/* Subtle background element for visual interest */}
