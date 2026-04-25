@@ -16,9 +16,10 @@ import {
   Info,
   Heart,
   Skull,
-  Leaf,
   Sun,
-  Moon
+  Moon,
+  Settings,
+  Key
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import { ScannerOverlay } from './components/ScannerOverlay';
@@ -26,7 +27,8 @@ import { SafetyBadge } from './components/SafetyBadge';
 import { 
   analyzeIngredients, 
   searchChemical, 
-  getBrandIntelligence 
+  getBrandIntelligence,
+  getApiKey
 } from './lib/gemini';
 import { 
   ProductAnalysis, 
@@ -45,6 +47,9 @@ export default function App() {
   const [result, setResult] = useState<ProductAnalysis | ChemicalInfo | BrandIntelligence | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDemoMode, setIsDemoMode] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [tempApiKey, setTempApiKey] = useState(localStorage.getItem('gemini_api_key') || '');
+  const [hasApiKey, setHasApiKey] = useState(!!getApiKey());
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
@@ -65,8 +70,18 @@ export default function App() {
     }
   };
 
-  const isApiKeyMissing = (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'undefined' || process.env.GEMINI_API_KEY === '') && 
-                        (!process.env.USER_GEMINI_KEY || process.env.USER_GEMINI_KEY === 'undefined' || process.env.USER_GEMINI_KEY === '');
+  const isApiKeyMissing = !hasApiKey;
+
+  const saveApiKey = () => {
+    if (tempApiKey.trim()) {
+      localStorage.setItem('gemini_api_key', tempApiKey.trim());
+      setHasApiKey(true);
+    } else {
+      localStorage.removeItem('gemini_api_key');
+      setHasApiKey(!!getApiKey());
+    }
+    setShowSettings(false);
+  };
 
   // Ensure theme is applied on mount
   React.useEffect(() => {
@@ -427,7 +442,7 @@ export default function App() {
           <div className="w-10 h-10 bg-brand-emerald-dark rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(52,211,153,0.3)]">
             <ShieldCheck className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-display font-extrabold tracking-tight">
+          <h1 className="text-2xl font-display font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-brand-emerald bg-clip-text text-transparent">
             ChemSafe<span className="text-brand-emerald">Expert</span>
           </h1>
         </div>
@@ -439,6 +454,14 @@ export default function App() {
             title={theme === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+          
+          <button 
+            onClick={() => setShowSettings(true)}
+            className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white"
+            title="Settings & API Key"
+          >
+            <Settings className="w-5 h-5" />
           </button>
 
           <div className={cn(
@@ -457,24 +480,30 @@ export default function App() {
         <div className="mb-6 p-5 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex flex-col md:flex-row items-start md:items-center gap-4 text-amber-400">
           <div className="flex items-center gap-3">
             <AlertTriangle className="w-6 h-6 shrink-0" />
-            <p className="text-sm font-bold uppercase tracking-wider">Intelligence Sandbox</p>
+            <p className="text-sm font-bold uppercase tracking-wider">Intelligence Offline</p>
           </div>
           <div className="flex-1">
             <p className="text-xs leading-relaxed">
-              Real-time API is offline. {isDemoMode ? "Currently running in " : "Please add "}
-              <code className="bg-amber-500/20 px-1.5 py-0.5 rounded text-white font-mono">USER_GEMINI_KEY</code>
-              {isDemoMode ? " DEMO MODE" : " to your environment variables."}
+              Real-time AI analysis requires a Gemini API key. {isDemoMode ? "Currently running in DEMO MODE." : "Please add your key in settings to unlock full capabilities."}
             </p>
           </div>
-          <button 
-            onClick={() => setIsDemoMode(!isDemoMode)}
-            className={cn(
-              "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
-              isDemoMode ? "bg-amber-500 text-black" : "bg-white/10 hover:bg-white/20 text-white"
-            )}
-          >
-            {isDemoMode ? "DISABLE DEMO" : "ENABLE DEMO MODE"}
-          </button>
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setIsDemoMode(!isDemoMode)}
+              className={cn(
+                "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
+                isDemoMode ? "bg-amber-500/20 text-amber-500 hover:bg-amber-500/30" : "bg-white/10 hover:bg-white/20 text-white"
+              )}
+            >
+              {isDemoMode ? "DISABLE DEMO" : "ENABLE DEMO"}
+            </button>
+            <button 
+              onClick={() => setShowSettings(true)}
+              className="px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+            >
+              ADD KEY
+            </button>
+          </div>
         </div>
       )}
 
@@ -785,6 +814,75 @@ export default function App() {
           >
             <X className="w-8 h-8" />
           </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Settings Modal */}
+      <AnimatePresence>
+        {showSettings && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSettings(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-inner border border-white/10 p-6 md:p-8 rounded-[32px] w-full max-w-md relative z-10 shadow-2xl"
+            >
+              <button 
+                onClick={() => setShowSettings(false)}
+                className="absolute top-6 right-6 text-dim hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-brand-emerald/10 flex items-center justify-center text-brand-emerald">
+                  <Key className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-display font-bold">API Configuration</h3>
+                  <p className="text-dim text-xs">Manage your Gemini Intelligence connection</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 mb-8">
+                <div>
+                  <label className="label-tiny mb-2">Gemini API Key</label>
+                  <input 
+                    type="password"
+                    value={tempApiKey}
+                    onChange={(e) => setTempApiKey(e.target.value)}
+                    placeholder="AIzaSy..."
+                    className="w-full bg-black/50 border border-white/10 py-3 px-4 rounded-xl font-mono text-sm focus:outline-none focus:ring-1 focus:ring-brand-emerald/50 transition-all placeholder:text-dim/30"
+                  />
+                  <p className="text-[10px] text-dim mt-2 leading-relaxed">
+                    Your key is stored securely in your browser's local storage and is never sent anywhere except directly to Google's API.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setShowSettings(false)}
+                  className="flex-1 py-3 px-4 rounded-xl font-bold text-xs bg-white/5 hover:bg-white/10 transition-colors"
+                >
+                  CANCEL
+                </button>
+                <button 
+                  onClick={saveApiKey}
+                  className="flex-1 py-3 px-4 rounded-xl font-bold text-xs bg-brand-emerald text-black hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.3)]"
+                >
+                  SAVE CONFIG
+                </button>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>

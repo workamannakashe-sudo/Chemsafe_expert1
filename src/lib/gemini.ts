@@ -1,15 +1,39 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { ProductAnalysis, BrandIntelligence, ChemicalInfo } from "../types";
 
-const GEMINI_API_KEY = process.env.USER_GEMINI_KEY || process.env.GEMINI_API_KEY;
-
-if (GEMINI_API_KEY) {
-  console.log("Gemini API: Key detected (from " + (process.env.USER_GEMINI_KEY ? "USER_GEMINI_KEY" : "GEMINI_API_KEY") + "), initializing engine...");
-} else {
-  console.warn("Gemini API: No key detected. Intelligence engine will be unavailable.");
+export function getApiKey(): string | null {
+  return import.meta.env?.VITE_USER_GEMINI_KEY || import.meta.env?.VITE_GEMINI_API_KEY || localStorage.getItem('gemini_api_key');
 }
 
-const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
+let ai: GoogleGenAI | null = null;
+
+export function initializeAI() {
+  const key = getApiKey();
+  if (key) {
+    ai = new GoogleGenAI({ apiKey: key });
+    return true;
+  }
+  ai = null;
+  return false;
+}
+
+initializeAI();
+
+// Simple persistent cache to reduce API calls
+const cache = {
+  get: (key: string) => {
+    try {
+      const item = localStorage.getItem(`chemsafe_cache_${key.toLowerCase().trim()}`);
+      if (item) return JSON.parse(item);
+    } catch { return null; }
+    return null;
+  },
+  set: (key: string, value: any) => {
+    try {
+      localStorage.setItem(`chemsafe_cache_${key.toLowerCase().trim()}`, JSON.stringify(value));
+    } catch { /* ignore */ }
+  }
+};
 
 // Error categorization helper
 function handleAiError(error: any): never {
@@ -63,7 +87,8 @@ async function retryWithBackoff<T>(fn: () => Promise<T>, retries = 3, initialDel
 }
 
 export async function analyzeIngredients(base64Image: string): Promise<ProductAnalysis> {
-  if (!ai) throw new Error("GEMINI_API_KEY is missing");
+  initializeAI();
+  if (!ai) throw new Error("GEMINI_API_KEY is missing. Please configure your API key in Settings.");
 
   const prompt = `
     Analyze the following ingredient label from a product image. 
@@ -92,7 +117,7 @@ export async function analyzeIngredients(base64Image: string): Promise<ProductAn
   `;
 
   return retryWithBackoff(async () => {
-    const response = await ai.models.generateContent({
+    const response = await ai!.models.generateContent({
       model: "gemini-1.5-flash",
       contents: [
         {
@@ -113,7 +138,11 @@ export async function analyzeIngredients(base64Image: string): Promise<ProductAn
 }
 
 export async function searchChemical(query: string): Promise<ChemicalInfo> {
-  if (!ai) throw new Error("GEMINI_API_KEY is missing");
+  const cached = cache.get(`chem_${query}`);
+  if (cached) return cached;
+
+  initializeAI();
+  if (!ai) throw new Error("GEMINI_API_KEY is missing. Please configure your API key in Settings.");
 
   const prompt = `
     Provide detailed chemical safety intelligence for the compound: "${query}".
@@ -130,7 +159,7 @@ export async function searchChemical(query: string): Promise<ChemicalInfo> {
   `;
 
   return retryWithBackoff(async () => {
-    const response = await ai.models.generateContent({
+    const response = await ai!.models.generateContent({
       model: "gemini-1.5-flash",
       contents: prompt,
       config: {
@@ -138,12 +167,18 @@ export async function searchChemical(query: string): Promise<ChemicalInfo> {
       }
     });
 
-    return JSON.parse(response.text!) as ChemicalInfo;
+    const result = JSON.parse(response.text!) as ChemicalInfo;
+    cache.set(`chem_${query}`, result);
+    return result;
   });
 }
 
 export async function getBrandIntelligence(brand: string): Promise<BrandIntelligence> {
-  if (!ai) throw new Error("GEMINI_API_KEY is missing");
+  const cached = cache.get(`brand_${brand}`);
+  if (cached) return cached;
+
+  initializeAI();
+  if (!ai) throw new Error("GEMINI_API_KEY is missing. Please configure your API key in Settings.");
 
   const prompt = `
     Provide brand intelligence for: "${brand}".
@@ -159,7 +194,7 @@ export async function getBrandIntelligence(brand: string): Promise<BrandIntellig
   `;
 
   return retryWithBackoff(async () => {
-    const response = await ai.models.generateContent({
+    const response = await ai!.models.generateContent({
       model: "gemini-1.5-flash",
       contents: prompt,
       config: {
@@ -167,6 +202,8 @@ export async function getBrandIntelligence(brand: string): Promise<BrandIntellig
       }
     });
 
-    return JSON.parse(response.text!) as BrandIntelligence;
+    const result = JSON.parse(response.text!) as BrandIntelligence;
+    cache.set(`brand_${brand}`, result);
+    return result;
   });
 }
