@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Camera, 
@@ -238,8 +238,8 @@ export default function App() {
     reader.readAsDataURL(file);
   };
 
-  const handleSearch = async (queryOverride?: string) => {
-    const query = queryOverride || searchQuery;
+  const handleSearch = async (queryOverride?: string | React.MouseEvent) => {
+    const query = typeof queryOverride === 'string' ? queryOverride : searchQuery;
     if (!query.trim()) return;
 
     setIsSearching(true);
@@ -274,8 +274,8 @@ export default function App() {
     }
   };
 
-  const handleRegistrySearch = async (queryOverride?: string) => {
-    const query = queryOverride || registrySearchQuery;
+  const handleRegistrySearch = async (queryOverride?: string | React.MouseEvent) => {
+    const query = typeof queryOverride === 'string' ? queryOverride : registrySearchQuery;
     if (!query.trim()) return;
 
     setIsSearching(true);
