@@ -478,27 +478,27 @@ export default function App() {
             </div>
           </div>
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <h4 className="label-tiny m-0 text-white">Ingredient Analysis</h4>
               <span className="text-xs font-bold bg-white/10 px-3 py-1 rounded-full">{data.ingredients?.length || 0} items detected</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-3">
               {data.ingredients?.map((ing, idx) => (
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: idx * 0.05 }} key={idx} className={cn(
-                  "p-4 rounded-2xl space-y-3 border transition-colors",
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.05 }} key={idx} className={cn(
+                  "p-4 rounded-xl border flex flex-col md:flex-row gap-4 items-start md:items-center transition-colors",
                   ing.status === 'SAFE' ? "bg-brand-emerald/5 border-brand-emerald/10 hover:border-brand-emerald/30" :
                     ing.status === 'CAUTION' ? "bg-amber-500/5 border-amber-500/20 hover:border-amber-500/40" :
                       "bg-rose-500/5 border-rose-500/20 hover:border-rose-500/40"
                 )}>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <p className={cn("font-bold text-sm md:text-base truncate mb-1", ing.status === 'CAUTION' ? "text-amber-400" : (ing.status === 'UNSAFE' || (ing.status as any) === 'DANGEROUS') ? "text-rose-400" : "text-white")}>{ing.name}</p>
-                      <p className="text-[11px] md:text-xs text-dim leading-snug">{ing.explanation}</p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-1">
+                      <p className={cn("font-bold text-sm md:text-base truncate", ing.status === 'CAUTION' ? "text-amber-400" : (ing.status === 'UNSAFE' || (ing.status as any) === 'DANGEROUS') ? "text-rose-400" : "text-white")}>{ing.name}</p>
+                      <SafetyBadge status={ing.status} showIcon={true} className="scale-75 origin-left m-0 py-0.5" />
                     </div>
-                    <SafetyBadge status={ing.status} showIcon={true} className="scale-75 origin-top-right m-0" />
+                    <p className="text-[11px] md:text-xs text-dim leading-snug">{ing.explanation}</p>
                   </div>
                   {(ing.benefits?.length || ing.healthHazards?.length) && (
-                    <div className="flex flex-wrap gap-2 pt-3 border-t border-white/5">
+                    <div className="flex flex-wrap gap-2 md:max-w-[220px] md:justify-end shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-white/5 md:border-l md:pl-4">
                       {ing.benefits?.map((b, i) => <span key={i} className="text-[9px] font-bold uppercase tracking-wider bg-brand-emerald/10 text-brand-emerald px-2 py-1 rounded-md flex items-center gap-1.5"><Leaf className="w-3 h-3" /> {b}</span>)}
                       {ing.healthHazards?.map((h, i) => <span key={i} className="text-[9px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-500 px-2 py-1 rounded-md flex items-center gap-1.5"><Skull className="w-3 h-3" /> {h}</span>)}
                     </div>
@@ -700,7 +700,7 @@ export default function App() {
           </div>
         )}
 
-        <motion.main variants={containerVariants} initial="hidden" animate="show" className="grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-[7fr_5fr] gap-4 sm:gap-5 flex-1 min-h-0 overflow-y-auto">
+        <motion.main variants={containerVariants} initial="hidden" animate="show" className="grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-[7fr_5fr] xl:grid-rows-[auto_minmax(0,1fr)] gap-4 sm:gap-5 flex-1 min-h-0 overflow-y-auto xl:overflow-hidden">
           <motion.div variants={itemVariants} className={cn("bento-card scanner-view md:col-span-2 xl:col-span-1 xl:row-span-2 border-2 bg-black flex flex-col justify-between p-0 overflow-hidden relative min-h-[300px] aspect-square sm:aspect-video xl:aspect-auto xl:h-full", isCameraActive ? "border-brand-emerald/60 shadow-[0_0_40px_rgba(52,211,153,0.1)]" : "border-brand-emerald/40")}>
             {isCameraActive && <motion.div animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 2, repeat: Infinity }} className="absolute inset-0 border-4 border-brand-emerald rounded-[48px] z-30 pointer-events-none" />}
             <div className="relative flex-1 group">
@@ -788,7 +788,7 @@ export default function App() {
             </div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="bento-card md:col-span-1 xl:col-span-1 flex flex-col gap-4 relative overflow-hidden">
+          <motion.div variants={itemVariants} className="bento-card md:col-span-1 xl:col-span-1 flex flex-col gap-4 relative overflow-hidden min-h-[400px] xl:min-h-0">
             {result && <div className="absolute -top-32 -right-32 w-64 h-64 bg-brand-emerald/5 rounded-full blur-[60px] pointer-events-none" />}
             <div className="flex items-center justify-between z-10">
               <span className="label-tiny m-0">{result ? 'Analysis Results' : 'Global Registry'}</span>
