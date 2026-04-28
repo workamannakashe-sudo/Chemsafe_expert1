@@ -464,17 +464,17 @@ export default function App() {
           <div className="flex flex-col gap-3">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-2xl md:text-3xl font-display font-bold leading-tight">{data.productName}</h2>
-                {data.brandName && <p className="text-dim text-sm mt-1 flex items-center gap-2"><Building2 className="w-4 h-4" /> {data.brandName}</p>}
+                <h2 className="text-2xl md:text-3xl xl:text-4xl font-display font-bold leading-tight">{data.productName}</h2>
+                {data.brandName && <p className="text-dim text-xs md:text-sm lg:text-base mt-1 flex flex-wrap items-center gap-2"><Building2 className="w-4 h-4" /> {data.brandName}</p>}
               </div>
               <SafetyBadge status={data.overallStatus} className="scale-110 origin-top-right" />
             </div>
           </div>
-          <div className="bg-brand-emerald/5 border border-brand-emerald/20 p-5 rounded-2xl flex gap-4 items-start shadow-inner">
+          <div className="bg-brand-emerald/5 border border-brand-emerald/20 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row gap-4 items-start shadow-inner">
             <div className="bg-brand-emerald/20 p-2 rounded-full shrink-0 mt-1"><Info className="w-5 h-5 text-brand-emerald" /></div>
             <div>
-              <h4 className="text-white font-bold text-sm mb-1">AI Summary</h4>
-              <p className="text-dim text-sm leading-relaxed">{data.summary}</p>
+              <h4 className="text-white font-bold text-sm md:text-base mb-1">AI Summary</h4>
+              <p className="text-dim text-xs md:text-sm lg:text-base leading-relaxed">{data.summary}</p>
             </div>
           </div>
           <div className="space-y-4">
@@ -492,8 +492,8 @@ export default function App() {
                 )}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <p className={cn("font-bold text-sm truncate mb-1", ing.status === 'CAUTION' ? "text-amber-400" : (ing.status === 'UNSAFE' || (ing.status as any) === 'DANGEROUS') ? "text-rose-400" : "text-white")}>{ing.name}</p>
-                      <p className="text-[11px] text-dim leading-snug">{ing.explanation}</p>
+                      <p className={cn("font-bold text-sm md:text-base truncate mb-1", ing.status === 'CAUTION' ? "text-amber-400" : (ing.status === 'UNSAFE' || (ing.status as any) === 'DANGEROUS') ? "text-rose-400" : "text-white")}>{ing.name}</p>
+                      <p className="text-[11px] md:text-xs text-dim leading-snug">{ing.explanation}</p>
                     </div>
                     <SafetyBadge status={ing.status} showIcon={true} className="scale-75 origin-top-right m-0" />
                   </div>
@@ -516,27 +516,27 @@ export default function App() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-display font-bold leading-tight">{data.name}</h2>
+              <h2 className="text-2xl md:text-3xl xl:text-4xl font-display font-bold leading-tight">{data.name}</h2>
               {data.formula && <p className="text-brand-emerald font-mono text-sm bg-brand-emerald/10 inline-block px-3 py-1 rounded-full mt-2">{data.formula}</p>}
             </div>
             <SafetyBadge status={data.safetyVerdict} className="scale-110 origin-top-right" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-rose-500/5 border border-rose-500/10 p-5 rounded-2xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-rose-500/5 border border-rose-500/10 p-4 sm:p-5 rounded-2xl">
               <h4 className="label-tiny flex items-center gap-2 text-rose-500 mb-3"><Skull className="w-4 h-4" /> Health Hazards</h4>
-              <ul className="space-y-2">{data.hazards?.map((h, i) => <li key={i} className="text-dim text-xs flex gap-3 leading-relaxed"><span className="text-rose-500 font-bold mt-0.5">›</span> {h}</li>)}</ul>
+              <ul className="space-y-2">{data.hazards?.map((h, i) => <li key={i} className="text-dim text-xs md:text-sm flex gap-3 leading-relaxed"><span className="text-rose-500 font-bold mt-0.5">›</span> {h}</li>)}</ul>
             </div>
             {data.benefits && data.benefits.length > 0 && (
-              <div className="bg-brand-emerald/5 border border-brand-emerald/10 p-5 rounded-2xl">
+              <div className="bg-brand-emerald/5 border border-brand-emerald/10 p-4 sm:p-5 rounded-2xl">
                 <h4 className="label-tiny flex items-center gap-2 text-brand-emerald mb-3"><Heart className="w-4 h-4" /> Benefits & Uses</h4>
-                <ul className="space-y-2">{data.benefits.map((b, i) => <li key={i} className="text-dim text-xs flex gap-3 leading-relaxed"><span className="text-brand-emerald font-bold mt-0.5">›</span> {b}</li>)}</ul>
+                <ul className="space-y-2">{data.benefits.map((b, i) => <li key={i} className="text-dim text-xs md:text-sm flex gap-3 leading-relaxed"><span className="text-brand-emerald font-bold mt-0.5">›</span> {b}</li>)}</ul>
               </div>
             )}
           </div>
           {data.regulations && (
             <div className="p-5 rounded-2xl border border-indigo-500/20 bg-indigo-500/5 text-xs text-indigo-200 flex gap-4 items-start">
               <ShieldCheck className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
-              <div><strong className="block text-indigo-400 uppercase tracking-widest text-[10px] mb-1">Global Regulations</strong><span className="leading-relaxed opacity-90">{data.regulations}</span></div>
+              <div><strong className="block text-indigo-400 uppercase tracking-widest text-[10px] md:text-xs mb-1">Global Regulations</strong><span className="leading-relaxed opacity-90 text-xs md:text-sm">{data.regulations}</span></div>
             </div>
           )}
         </motion.div>
@@ -547,18 +547,18 @@ export default function App() {
       return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
           <div className="flex items-start justify-between gap-4">
-            <h2 className="text-3xl font-display font-bold">{data.brandName}</h2>
+            <h2 className="text-2xl md:text-3xl xl:text-4xl font-display font-bold">{data.brandName}</h2>
             <SafetyBadge status={data.reputationStatus} label={data.reputationStatus === 'SAFE' ? 'TRUSTED' : data.reputationStatus} className="scale-110 origin-top-right" />
           </div>
-          <div className="p-5 rounded-2xl bg-brand-emerald/5 border border-brand-emerald/20 flex gap-4 items-start">
+          <div className="p-4 sm:p-5 rounded-2xl bg-brand-emerald/5 border border-brand-emerald/20 flex flex-col sm:flex-row gap-4 items-start">
             <Building2 className="w-5 h-5 text-brand-emerald shrink-0 mt-0.5" />
-            <p className="text-dim text-sm leading-relaxed">{data.summary}</p>
+            <p className="text-dim text-xs md:text-sm lg:text-base leading-relaxed">{data.summary}</p>
           </div>
           <div className="space-y-4">
             <h4 className="label-tiny flex items-center gap-2 text-white"><History className="w-4 h-4" /> Recall History</h4>
             <div className="grid gap-3">
               {data.recallHistory?.length > 0 ? data.recallHistory.map((h, i) => (
-                <div key={i} className="bg-rose-500/5 p-4 rounded-xl text-sm border border-rose-500/20 flex gap-3 items-start"><AlertTriangle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" /><span className="text-dim leading-relaxed">{h}</span></div>
+                <div key={i} className="bg-rose-500/5 p-4 rounded-xl text-xs md:text-sm border border-rose-500/20 flex gap-3 items-start"><AlertTriangle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" /><span className="text-dim leading-relaxed">{h}</span></div>
               )) : (
                 <div className="bg-brand-emerald/5 border border-brand-emerald/10 p-4 rounded-xl flex items-center gap-3"><ShieldCheck className="w-5 h-5 text-brand-emerald" /><p className="text-brand-emerald text-sm font-medium">No significant recalls found.</p></div>
               )}
@@ -652,28 +652,28 @@ export default function App() {
         }
         .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
       `}</style>
-      <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-10 relative min-h-screen flex flex-col z-0">
-        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-emerald/15 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-glow" />
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-10 relative min-h-screen flex flex-col z-0">
+        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] md:w-[800px] h-[400px] md:h-[600px] bg-brand-emerald/15 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-glow" />
 
-        <header className="mb-8 flex justify-between items-center">
+        <header className="mb-6 md:mb-8 flex flex-wrap gap-4 justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-brand-emerald-dark rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(52,211,153,0.3)]">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h1 className="text-2xl font-display font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-brand-emerald bg-clip-text text-transparent">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-brand-emerald bg-clip-text text-transparent">
               ChemSafe<span className="text-brand-emerald">Expert</span>
             </h1>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button onClick={toggleTheme} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white" title="Toggle Theme">
+          <div className="flex flex-wrap items-center gap-3 md:gap-4">
+            <button onClick={toggleTheme} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white min-w-[44px] min-h-[44px] flex items-center justify-center" title="Toggle Theme">
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <button onClick={() => setShowSettings(true)} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white" title="Settings">
+            <button onClick={() => setShowSettings(true)} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white min-w-[44px] min-h-[44px] flex items-center justify-center" title="Settings">
               <Settings className="w-5 h-5" />
             </button>
-            <div className={cn("px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-[12px] font-bold flex items-center gap-2", isApiKeyMissing ? "bg-amber-500/10 border-amber-500/30 text-amber-500" : "bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald")}>
-              <div className={cn("w-2 h-2 rounded-full animate-pulse", isApiKeyMissing ? "bg-amber-500" : "bg-brand-emerald")} />
+            <div className={cn("px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-[12px] font-bold flex items-center gap-2 min-h-[44px]", isApiKeyMissing ? "bg-amber-500/10 border-amber-500/30 text-amber-500" : "bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald")}>
+              <div className={cn("w-2 h-2 rounded-full animate-pulse shrink-0", isApiKeyMissing ? "bg-amber-500" : "bg-brand-emerald")} />
               <span className="hidden sm:inline">{isApiKeyMissing ? 'INTELLIGENCE OFFLINE' : 'GEMINI CONNECTED'}</span>
               <span className="sm:hidden uppercase tracking-widest">{isApiKeyMissing ? 'OFFLINE' : 'Connected'}</span>
             </div>
@@ -681,27 +681,27 @@ export default function App() {
         </header>
 
         {isApiKeyMissing && (
-          <div className="mb-6 p-5 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex flex-col md:flex-row items-start md:items-center gap-4 text-amber-400">
+          <div className="mb-6 p-4 sm:p-5 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex flex-col md:flex-row items-start md:items-center gap-4 text-amber-400">
             <div className="flex items-center gap-3">
               <AlertTriangle className="w-6 h-6 shrink-0" />
-              <p className="text-sm font-bold uppercase tracking-wider">Intelligence Offline</p>
+              <p className="text-xs sm:text-sm font-bold uppercase tracking-wider">Intelligence Offline</p>
             </div>
             <div className="flex-1">
-              <p className="text-xs leading-relaxed">Real-time AI analysis requires a Gemini API key. {isDemoMode ? "Currently running in DEMO MODE." : "Please add your key in settings to unlock full capabilities."}</p>
+              <p className="text-xs sm:text-sm leading-relaxed">Real-time AI analysis requires a Gemini API key. {isDemoMode ? "Currently running in DEMO MODE." : "Please add your key in settings to unlock full capabilities."}</p>
             </div>
-            <div className="flex gap-2">
-              <button onClick={() => setIsDemoMode(!isDemoMode)} className={cn("px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap", isDemoMode ? "bg-amber-500/20 text-amber-500 hover:bg-amber-500/30" : "bg-white/10 hover:bg-white/20 text-white")}>
+            <div className="flex flex-wrap gap-2 w-full md:w-auto">
+              <button onClick={() => setIsDemoMode(!isDemoMode)} className={cn("flex-1 md:flex-none px-4 py-3 sm:py-2 min-h-[44px] rounded-xl text-xs font-bold transition-all whitespace-nowrap", isDemoMode ? "bg-amber-500/20 text-amber-500 hover:bg-amber-500/30" : "bg-white/10 hover:bg-white/20 text-white")}>
                 {isDemoMode ? "DISABLE DEMO" : "ENABLE DEMO"}
               </button>
-              <button onClick={() => setShowSettings(true)} className="px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.4)]">
+              <button onClick={() => setShowSettings(true)} className="flex-1 md:flex-none px-4 py-3 sm:py-2 min-h-[44px] rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.4)]">
                 ADD KEY
               </button>
             </div>
           </div>
         )}
 
-        <motion.main variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-5 flex-1 min-h-0 overflow-y-auto">
-          <motion.div variants={itemVariants} className={cn("bento-card scanner-view lg:row-span-2 border-2 bg-black flex flex-col justify-between p-0 overflow-hidden relative min-h-[400px] sm:min-h-[500px] lg:min-h-0 aspect-[4/5] md:aspect-auto", isCameraActive ? "border-brand-emerald/60 shadow-[0_0_40px_rgba(52,211,153,0.1)]" : "border-brand-emerald/40")}>
+        <motion.main variants={containerVariants} initial="hidden" animate="show" className="grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-[7fr_5fr] gap-4 sm:gap-5 flex-1 min-h-0 overflow-y-auto">
+          <motion.div variants={itemVariants} className={cn("bento-card scanner-view md:col-span-2 xl:col-span-1 xl:row-span-2 border-2 bg-black flex flex-col justify-between p-0 overflow-hidden relative min-h-[300px] aspect-square sm:aspect-video xl:aspect-auto xl:h-full", isCameraActive ? "border-brand-emerald/60 shadow-[0_0_40px_rgba(52,211,153,0.1)]" : "border-brand-emerald/40")}>
             {isCameraActive && <motion.div animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 2, repeat: Infinity }} className="absolute inset-0 border-4 border-brand-emerald rounded-[48px] z-30 pointer-events-none" />}
             <div className="relative flex-1 group">
               {isScanning ? (
@@ -728,22 +728,22 @@ export default function App() {
               <canvas ref={canvasRef} className="hidden" />
               <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept="image/*" />
             </div>
-            <div className="bg-gradient-to-t from-black via-black/80 to-transparent p-5 md:p-8 pt-10 md:pt-16 relative z-10 transition-all">
+            <div className="bg-gradient-to-t from-black via-black/80 to-transparent p-4 sm:p-6 md:p-8 pt-10 md:pt-16 relative z-10 transition-all">
               <span className="label-tiny">Analysis Engine</span>
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex-1">
-                  <h2 className="text-2xl font-display font-bold mb-1">{isCameraActive ? "Align Label" : "Scanner Ready"}</h2>
-                  <p className="text-dim text-xs">{isCameraActive ? "Position ingredients within the window." : "FSSAI & EU REACH Cross-referencing enabled."}</p>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-bold mb-1">{isCameraActive ? "Align Label" : "Scanner Ready"}</h2>
+                  <p className="text-dim text-xs md:text-sm">{isCameraActive ? "Position ingredients within the window." : "FSSAI & EU REACH Cross-referencing enabled."}</p>
                 </div>
-                <div className="flex gap-2">
-                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => fileInputRef.current?.click()} className="bg-white/5 border border-white/10 text-white p-4 rounded-2xl hover:bg-white/10 transition-colors" title="Upload image"><Upload className="w-6 h-6" /></motion.button>
+                <div className="flex flex-wrap gap-2">
+                  <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => fileInputRef.current?.click()} className="bg-white/5 border border-white/10 text-white p-3 sm:p-4 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-2xl hover:bg-white/10 transition-colors" title="Upload image"><Upload className="w-5 h-5 sm:w-6 sm:h-6" /></motion.button>
                   {isCameraActive ? (
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={takePhoto} className="bg-brand-emerald text-black p-4 rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]" title="Capture photo"><Scan className="w-6 h-6" /></motion.button>
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={takePhoto} className="bg-brand-emerald text-black p-3 sm:p-4 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]" title="Capture photo"><Scan className="w-5 h-5 sm:w-6 sm:h-6" /></motion.button>
                   ) : (
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={startCamera} className="bg-brand-emerald text-black p-4 rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]" title="Start camera"><Camera className="w-6 h-6" /></motion.button>
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={startCamera} className="bg-brand-emerald text-black p-3 sm:p-4 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]" title="Start camera"><Camera className="w-5 h-5 sm:w-6 sm:h-6" /></motion.button>
                   )}
                   {isCameraActive && (
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={stopCamera} className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-4 rounded-2xl hover:bg-rose-500/20 transition-colors" title="Stop camera"><X className="w-6 h-6" /></motion.button>
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={stopCamera} className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-3 sm:p-4 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-2xl hover:bg-rose-500/20 transition-colors" title="Stop camera"><X className="w-5 h-5 sm:w-6 sm:h-6" /></motion.button>
                   )}
                 </div>
               </div>
@@ -765,20 +765,20 @@ export default function App() {
             )}
           </AnimatePresence>
 
-          <motion.div variants={itemVariants} className="bento-card search-section flex flex-col gap-6">
+          <motion.div variants={itemVariants} className="bento-card search-section md:col-span-1 xl:col-span-1 flex flex-col gap-4 sm:gap-6">
             <div>
               <div className="flex items-center gap-3 mb-4"><div className="bg-brand-emerald/20 p-2 rounded-lg"><Search className="w-5 h-5 text-brand-emerald" /></div><h3 className="text-lg md:text-xl font-display font-bold text-white">Intelligence Search</h3></div>
               <div className="relative group">
-                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSearch()} placeholder="Scan chemicals, brands, or E-numbers..." className="w-full bg-black/40 border border-white/10 hover:border-white/20 py-4 md:py-5 px-14 rounded-2xl font-medium text-base focus:outline-none focus:ring-2 focus:ring-brand-emerald/50 focus:border-brand-emerald/50 transition-all placeholder:text-dim/40 shadow-inner" />
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-dim/50 group-focus-within:text-brand-emerald transition-colors" />
-                {isSearching ? <Loader2 className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 animate-spin text-brand-emerald" /> : <button onClick={() => handleSearch()} className="absolute right-3 top-1/2 -translate-y-1/2 bg-brand-emerald/10 hover:bg-brand-emerald/20 text-brand-emerald p-2 rounded-xl transition-colors"><ChevronRight className="w-4 h-4" /></button>}
+                <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSearch()} placeholder="Scan chemicals, brands, or E-numbers..." className="w-full bg-black/40 border border-white/10 hover:border-white/20 py-3 sm:py-4 md:py-5 px-12 sm:px-14 rounded-2xl font-medium text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-brand-emerald/50 focus:border-brand-emerald/50 transition-all placeholder:text-dim/40 shadow-inner min-h-[44px]" />
+                <Search className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-dim/50 group-focus-within:text-brand-emerald transition-colors" />
+                {isSearching ? <Loader2 className="absolute right-4 sm:right-5 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 animate-spin text-brand-emerald" /> : <button onClick={() => handleSearch()} className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-brand-emerald/10 hover:bg-brand-emerald/20 text-brand-emerald p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-colors"><ChevronRight className="w-4 h-4" /></button>}
               </div>
             </div>
             <div>
               <span className="label-tiny text-dim mb-3 block">Trending Scans</span>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {['Nestlé', 'Titanium Dioxide', 'Red 40', 'Johnson & Johnson'].map(item => (
-                  <button key={item} onClick={() => { setSearchQuery(item); handleSearch(item); }} className={cn("bg-white/5 border border-white/5 py-3 px-4 rounded-xl text-xs md:text-sm font-bold hover:bg-white/10 hover:border-white/10 transition-all text-center", searchQuery === item && "bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald shadow-[0_0_15px_rgba(52,211,153,0.15)]")}>{item}</button>
+                  <button key={item} onClick={() => { setSearchQuery(item); handleSearch(item); }} className={cn("bg-white/5 border border-white/5 py-2 sm:py-3 px-3 sm:px-4 min-h-[44px] rounded-xl text-xs md:text-sm font-bold hover:bg-white/10 hover:border-white/10 transition-all text-center flex-1 sm:flex-none whitespace-nowrap", searchQuery === item && "bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald shadow-[0_0_15px_rgba(52,211,153,0.15)]")}>{item}</button>
                 ))}
               </div>
             </div>
@@ -788,7 +788,7 @@ export default function App() {
             </div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="bento-card flex flex-col gap-4 relative overflow-hidden">
+          <motion.div variants={itemVariants} className="bento-card md:col-span-1 xl:col-span-1 flex flex-col gap-4 relative overflow-hidden">
             {result && <div className="absolute -top-32 -right-32 w-64 h-64 bg-brand-emerald/5 rounded-full blur-[60px] pointer-events-none" />}
             <div className="flex items-center justify-between z-10">
               <span className="label-tiny m-0">{result ? 'Analysis Results' : 'Global Registry'}</span>
@@ -798,10 +798,10 @@ export default function App() {
             </div>
             {!result && (
               <div className="relative group z-10">
-                <input type="text" value={registrySearchQuery} onChange={(e) => setRegistrySearchQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleRegistrySearch()} placeholder="Deep scan global databases..." className="w-full bg-inner border border-inner hover:border-white/10 py-3.5 px-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-emerald/30 transition-all placeholder:text-dim/50" />
+                <input type="text" value={registrySearchQuery} onChange={(e) => setRegistrySearchQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleRegistrySearch()} placeholder="Deep scan global databases..." className="w-full bg-inner border border-inner hover:border-white/10 py-3 sm:py-3.5 px-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-emerald/30 transition-all placeholder:text-dim/50 min-h-[44px]" />
                 <Beaker className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-dim/50 group-focus-within:text-brand-emerald transition-colors" />
-                <button onClick={() => handleRegistrySearch()} disabled={isSearching} className="absolute right-2 top-1/2 -translate-y-1/2 text-brand-emerald hover:text-brand-emerald-light transition-colors disabled:opacity-50 p-1">
-                  {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : <ChevronRight className="w-5 h-5" />}
+                <button onClick={() => handleRegistrySearch()} disabled={isSearching} className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 text-brand-emerald hover:text-brand-emerald-light transition-colors disabled:opacity-50 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center">
+                  {isSearching ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> : <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />}
                 </button>
               </div>
             )}
