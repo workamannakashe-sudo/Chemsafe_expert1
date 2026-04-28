@@ -1,9 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Camera, Upload, Search, ShieldCheck, AlertTriangle, Beaker, Building2, 
-  Scan, History, X, Loader2, ChevronRight, Info, Heart, Skull, Sun, Moon, 
-  Settings, Key, Leaf, ShieldAlert, ShieldX 
+import {
+  Camera, Upload, Search, ShieldCheck, AlertTriangle, Beaker, Building2,
+  Scan, History, X, Loader2, ChevronRight, Info, Heart, Skull, Sun, Moon,
+  Settings, Key, Leaf, ShieldAlert, ShieldX
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -68,9 +68,9 @@ export function getApiKey(): string | null {
   const HARDCODED_KEY = typeof window !== 'undefined' ? atob(_p1 + _p2 + _p3 + _p4) : null;
 
   let envKey = null;
-  try { envKey = import.meta.env.VITE_USER_GEMINI_KEY || import.meta.env.VITE_GEMINI_API_KEY; } catch (e) {}
+  try { envKey = import.meta.env.VITE_USER_GEMINI_KEY || import.meta.env.VITE_GEMINI_API_KEY; } catch (e) { }
   if (!envKey) {
-    try { envKey = process.env.USER_GEMINI_KEY || process.env.GEMINI_API_KEY; } catch (e) {}
+    try { envKey = process.env.USER_GEMINI_KEY || process.env.GEMINI_API_KEY; } catch (e) { }
   }
   return HARDCODED_KEY || envKey || localStorage.getItem('gemini_api_key');
 }
@@ -96,7 +96,7 @@ const cache = {
     return null;
   },
   set: (key: string, value: any) => {
-    try { localStorage.setItem(`chemsafe_cache_${key.toLowerCase().trim()}`, JSON.stringify(value)); } catch {}
+    try { localStorage.setItem(`chemsafe_cache_${key.toLowerCase().trim()}`, JSON.stringify(value)); } catch { }
   }
 };
 
@@ -147,7 +147,7 @@ export async function searchChemical(query: string): Promise<ChemicalInfo> {
   initializeAI();
   if (!ai) throw new Error("GEMINI_API_KEY is missing.");
   const prompt = `Provide detailed chemical safety intelligence for the compound: "${query}". Return a JSON object with: {"name": "...", "formula": "...", "commonUses": [], "hazards": [], "benefits": [], "regulations": "...", "safetyVerdict": "SAFE" | "CAUTION" | "UNSAFE"}`;
-  
+
   return retryWithBackoff(async () => {
     const response = await ai!.models.generateContent({ model: "gemini-2.5-flash", contents: prompt, config: { responseMimeType: "application/json" } });
     const result = JSON.parse(response.text!) as ChemicalInfo;
@@ -162,7 +162,7 @@ export async function getBrandIntelligence(brand: string): Promise<BrandIntellig
   initializeAI();
   if (!ai) throw new Error("GEMINI_API_KEY is missing.");
   const prompt = `Provide brand intelligence for: "${brand}". Analyze safety reputation, recall history, and manufacturing standards. Return a JSON object with: {"brandName": "...", "reputationStatus": "SAFE" | "CAUTION" | "UNSAFE", "summary": "...", "recallHistory": [], "manufacturingStandards": "..."}`;
-  
+
   return retryWithBackoff(async () => {
     const response = await ai!.models.generateContent({ model: "gemini-2.5-flash", contents: prompt, config: { responseMimeType: "application/json" } });
     const result = JSON.parse(response.text!) as BrandIntelligence;
@@ -182,8 +182,8 @@ function useCamera() {
 
   const startCamera = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } } 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }
       });
       streamRef.current = stream;
       setIsCameraActive(true);
@@ -221,8 +221,8 @@ function useCamera() {
 // COMPONENTS
 // ==========================================
 
-const SafetyBadge: React.FC<{ status: SafetyStatus; className?: string; showIcon?: boolean; label?: string; }> = ({ 
-  status, className, showIcon = true, label: customLabel 
+const SafetyBadge: React.FC<{ status: SafetyStatus; className?: string; showIcon?: boolean; label?: string; }> = ({
+  status, className, showIcon = true, label: customLabel
 }) => {
   const config = {
     SAFE: { color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', icon: <ShieldCheck className="w-4 h-4" />, label: 'SAFE' },
@@ -290,7 +290,7 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [tempApiKey, setTempApiKey] = useState(localStorage.getItem('gemini_api_key') || '');
   const [hasApiKey, setHasApiKey] = useState(!!getApiKey());
-  
+
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof window !== 'undefined') return localStorage.getItem('theme') as 'dark' | 'light' || 'dark';
     return 'dark';
@@ -338,7 +338,7 @@ export default function App() {
     canvas.height = video.videoHeight;
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     const base64 = canvas.toDataURL('image/jpeg').split(',')[1];
-    
+
     setIsScanning(true);
     setError(null);
     setResult(null);
@@ -487,8 +487,8 @@ export default function App() {
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: idx * 0.05 }} key={idx} className={cn(
                   "p-4 rounded-2xl space-y-3 border transition-colors",
                   ing.status === 'SAFE' ? "bg-brand-emerald/5 border-brand-emerald/10 hover:border-brand-emerald/30" :
-                  ing.status === 'CAUTION' ? "bg-amber-500/5 border-amber-500/20 hover:border-amber-500/40" :
-                  "bg-rose-500/5 border-rose-500/20 hover:border-rose-500/40"
+                    ing.status === 'CAUTION' ? "bg-amber-500/5 border-amber-500/20 hover:border-amber-500/40" :
+                      "bg-rose-500/5 border-rose-500/20 hover:border-rose-500/40"
                 )}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
@@ -654,7 +654,7 @@ export default function App() {
       `}</style>
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-10 relative min-h-screen flex flex-col z-0">
         <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-emerald/15 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-glow" />
-        
+
         <header className="mb-8 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-brand-emerald-dark rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(52,211,153,0.3)]">
@@ -664,7 +664,7 @@ export default function App() {
               ChemSafe<span className="text-brand-emerald">Expert</span>
             </h1>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <button onClick={toggleTheme} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white" title="Toggle Theme">
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -827,7 +827,7 @@ export default function App() {
           </motion.div>
 
         </motion.main>
-        
+
         <footer className="mt-8 py-4 border-t border-white/5 flex justify-between items-center text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">
           <span>&copy; 2026 CHEMSAFE INTELLIGENCE SYS</span>
           <div className="flex gap-6"><span>Privacy</span><span>Terms</span><span>v2.4.0</span></div>
