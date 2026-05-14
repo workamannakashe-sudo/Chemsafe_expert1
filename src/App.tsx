@@ -47,7 +47,7 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
+const itemVariants: any = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
 };
@@ -503,40 +503,39 @@ export default function App() {
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-emerald/15 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-glow" />
       
       {/* Header */}
-      <header className="mb-8 flex justify-between items-center">
+      <header className="mb-6 md:mb-8 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-brand-emerald-dark rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(52,211,153,0.3)]">
+          <div className="w-10 h-10 bg-brand-emerald-dark rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(52,211,153,0.3)] shrink-0">
             <ShieldCheck className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-display font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-brand-emerald bg-clip-text text-transparent">
+          <h1 className="hidden sm:block text-xl md:text-2xl font-display font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-brand-emerald bg-clip-text text-transparent">
             ChemSafe<span className="text-brand-emerald">Expert</span>
           </h1>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <button 
             onClick={toggleTheme}
-            className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white"
+            className="p-2 md:p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white"
             title={theme === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {theme === 'dark' ? <Sun className="w-4 h-4 md:w-5 md:h-5" /> : <Moon className="w-4 h-4 md:w-5 md:h-5" />}
           </button>
           
           <button 
             onClick={() => setShowSettings(true)}
-            className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white"
+            className="p-2 md:p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-dim hover:text-white"
             title="Settings & API Key"
           >
-            <Settings className="w-5 h-5" />
+            <Settings className="w-4 h-4 md:w-5 md:h-5" />
           </button>
 
           <div className={cn(
-            "px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-[12px] font-bold flex items-center gap-2",
+            "px-2 md:px-4 py-1.5 md:py-2 rounded-full text-[10px] md:text-[12px] font-bold flex items-center gap-2",
             isApiKeyMissing ? "bg-amber-500/10 border-amber-500/30 text-amber-500" : "bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald"
           )}>
             <div className={cn("w-2 h-2 rounded-full animate-pulse", isApiKeyMissing ? "bg-amber-500" : "bg-brand-emerald")} />
-            <span className="hidden sm:inline">{isApiKeyMissing ? 'INTELLIGENCE OFFLINE' : 'GEMINI 1.5 FLASH CONNECTED'}</span>
-            <span className="sm:hidden uppercase tracking-widest">{isApiKeyMissing ? 'OFFLINE' : 'Connected'}</span>
+            <span className="hidden md:inline">{isApiKeyMissing ? 'INTELLIGENCE OFFLINE' : 'GEMINI 1.5 FLASH CONNECTED'}</span>
           </div>
         </div>
       </header>
@@ -578,12 +577,12 @@ export default function App() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] lg:grid-rows-[auto_1fr] gap-4 md:gap-5 flex-1 min-h-0 overflow-y-auto lg:overflow-hidden custom-scrollbar pb-10 lg:pb-0"
+        className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] lg:grid-rows-[auto_1fr] gap-3 md:gap-5 flex-1 min-h-0 overflow-y-auto lg:overflow-hidden custom-scrollbar pb-10 lg:pb-0 px-1 md:px-0"
       >
         
         {/* Scanner Section - Spans 2 rows */}
         <motion.div variants={itemVariants} className={cn(
-          "bento-card scanner-view lg:row-span-2 border-2 bg-black flex-col justify-between p-0 overflow-hidden relative min-h-[40vh] lg:min-h-0 h-full",
+          "bento-card scanner-view lg:row-span-2 border-2 bg-black flex-col justify-between p-0 overflow-hidden relative min-h-[35vh] lg:min-h-0 h-auto lg:h-full",
           result ? "hidden lg:flex" : "flex",
           isCameraActive ? "border-brand-emerald/60 shadow-[0_0_40px_rgba(52,211,153,0.1)]" : "border-brand-emerald/40"
         )}>
@@ -599,23 +598,23 @@ export default function App() {
           <div className="relative flex-1 group">
             {isScanning ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 z-20">
-                <Loader2 className="w-12 h-12 text-brand-emerald animate-spin mb-4" />
-                <p className="text-brand-emerald font-display font-bold tracking-[0.2em] text-xs uppercase">
+                <Loader2 className="w-10 h-10 md:w-12 md:h-12 text-brand-emerald animate-spin mb-4" />
+                <p className="text-brand-emerald font-display font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase">
                   Analyzing Label...
                 </p>
               </div>
             ) : !isCameraActive ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-4">
-                <div className="w-16 h-16 rounded-full bg-brand-emerald/10 flex items-center justify-center text-brand-emerald group-hover:scale-110 transition-transform">
-                  <Camera className="w-8 h-8" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 md:p-8 text-center space-y-3 md:space-y-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-brand-emerald/10 flex items-center justify-center text-brand-emerald group-hover:scale-110 transition-transform">
+                  <Camera className="w-6 h-6 md:w-8 md:h-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-display font-bold">Smart Viewfinder</h3>
-                  <p className="text-dim text-sm max-w-xs mx-auto">Activate camera to scan labels directly using AI-vision.</p>
+                  <h3 className="text-lg md:text-xl font-display font-bold">Smart Viewfinder</h3>
+                  <p className="text-dim text-xs md:text-sm max-w-[200px] md:max-w-xs mx-auto">Activate camera to scan labels directly using AI-vision.</p>
                 </div>
                 <button 
                   onClick={startCamera}
-                  className="bg-brand-emerald/20 border border-brand-emerald/40 text-brand-emerald py-3 px-8 rounded-2xl font-display font-bold text-sm tracking-wider hover:bg-brand-emerald/30 transition-all font-bold"
+                  className="bg-brand-emerald/20 border border-brand-emerald/40 text-brand-emerald py-2.5 px-6 md:py-3 md:px-8 rounded-xl md:rounded-2xl font-display font-bold text-xs md:text-sm tracking-wider hover:bg-brand-emerald/30 transition-all font-bold"
                 >
                   START CAMERA
                 </button>
@@ -658,14 +657,14 @@ export default function App() {
             />
           </div>
 
-          <div className="bg-gradient-to-t from-black via-black/80 to-transparent p-5 md:p-8 pt-10 md:pt-16 relative z-10 transition-all">
+          <div className="bg-gradient-to-t from-black via-black/80 to-transparent p-4 md:p-8 pt-8 md:pt-16 relative z-10 transition-all">
             <span className="label-tiny">Analysis Engine</span>
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center justify-between gap-3 md:gap-4">
               <div className="flex-1">
-                <h2 className="text-2xl font-display font-bold mb-1">
+                <h2 className="text-xl md:text-2xl font-display font-bold mb-1">
                   {isCameraActive ? "Align Label" : "Scanner Ready"}
                 </h2>
-                <p className="text-dim text-xs">
+                <p className="text-dim text-[10px] md:text-xs">
                   {isCameraActive ? "Position ingredients within the window." : "FSSAI & EU REACH Cross-referencing enabled."}
                 </p>
               </div>
@@ -674,30 +673,30 @@ export default function App() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => fileInputRef.current?.click()}
-                  className="bg-white/5 border border-white/10 text-white p-4 rounded-2xl hover:bg-white/10 transition-colors"
+                  className="bg-white/5 border border-white/10 text-white p-3 md:p-4 rounded-xl md:rounded-2xl hover:bg-white/10 transition-colors"
                   title="Upload image"
                 >
-                  <Upload className="w-6 h-6" />
+                  <Upload className="w-5 h-5 md:w-6 md:h-6" />
                 </motion.button>
                 {isCameraActive ? (
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={takePhoto}
-                    className="bg-brand-emerald text-black p-4 rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]"
+                    className="bg-brand-emerald text-black p-3 md:p-4 rounded-xl md:rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]"
                     title="Capture photo"
                   >
-                    <Scan className="w-6 h-6" />
+                    <Scan className="w-5 h-5 md:w-6 md:h-6" />
                   </motion.button>
                 ) : (
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={startCamera}
-                    className="bg-brand-emerald text-black p-4 rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]"
+                    className="bg-brand-emerald text-black p-3 md:p-4 rounded-xl md:rounded-2xl hover:bg-brand-emerald-light transition-colors shadow-[0_0_20px_rgba(52,211,153,0.4)]"
                     title="Start camera"
                   >
-                    <Camera className="w-6 h-6" />
+                    <Camera className="w-5 h-5 md:w-6 md:h-6" />
                   </motion.button>
                 )}
                 {isCameraActive && (
@@ -705,10 +704,10 @@ export default function App() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={stopCamera}
-                    className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-4 rounded-2xl hover:bg-rose-500/20 transition-colors"
+                    className="bg-rose-500/10 border border-rose-500/20 text-rose-500 p-3 md:p-4 rounded-xl md:rounded-2xl hover:bg-rose-500/20 transition-colors"
                     title="Stop camera"
                   >
-                    <X className="w-6 h-6" />
+                    <X className="w-5 h-5 md:w-6 md:h-6" />
                   </motion.button>
                 )}
               </div>
@@ -772,15 +771,15 @@ export default function App() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 placeholder="Scan chemicals, brands, or E-numbers..."
-                className="w-full bg-black/40 border border-white/10 hover:border-white/20 py-4 md:py-5 px-14 rounded-2xl font-medium text-base focus:outline-none focus:ring-2 focus:ring-brand-emerald/50 focus:border-brand-emerald/50 transition-all placeholder:text-dim/40 shadow-inner"
+                className="w-full bg-black/40 border border-white/10 hover:border-white/20 py-3 md:py-5 pl-12 pr-14 rounded-xl md:rounded-2xl font-medium text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-brand-emerald/50 focus:border-brand-emerald/50 transition-all placeholder:text-dim/40 shadow-inner"
               />
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-dim/50 group-focus-within:text-brand-emerald transition-colors" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-dim/50 group-focus-within:text-brand-emerald transition-colors" />
               {isSearching ? (
-                <Loader2 className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 animate-spin text-brand-emerald" />
+                <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 animate-spin text-brand-emerald" />
               ) : (
                 <button 
                   onClick={handleSearch}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-brand-emerald/10 hover:bg-brand-emerald/20 text-brand-emerald p-2 rounded-xl transition-colors"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-emerald/10 hover:bg-brand-emerald/20 text-brand-emerald p-2 rounded-lg md:rounded-xl transition-colors"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -788,15 +787,15 @@ export default function App() {
             </div>
           </div>
 
-          <div>
+          <div className="overflow-hidden w-full relative">
             <span className="label-tiny text-dim mb-3 block">Trending Scans</span>
-            <div className="grid grid-cols-2 gap-3">
-              {['Nestlé', 'Titanium Dioxide', 'Red 40', 'Johnson & Johnson'].map(item => (
+            <div className="flex w-max animate-marquee gap-2 md:gap-3 px-1 hover:[animation-play-state:paused]">
+              {[...['Nestlé', 'Titanium Dioxide', 'Red 40', 'Johnson & Johnson', 'Coca-Cola'], ...['Nestlé', 'Titanium Dioxide', 'Red 40', 'Johnson & Johnson', 'Coca-Cola']].map((item, idx) => (
                 <button 
-                  key={item}
+                  key={`${item}-${idx}`}
                   onClick={() => { setSearchQuery(item); handleSearch(); }}
                   className={cn(
-                    "bg-white/5 border border-white/5 py-3 px-4 rounded-xl text-xs md:text-sm font-bold hover:bg-white/10 hover:border-white/10 transition-all text-center",
+                    "bg-white/5 border border-white/5 py-2 px-4 md:py-3 md:px-5 rounded-xl text-[10px] md:text-xs font-bold hover:bg-white/10 hover:border-white/10 transition-all text-center flex-none whitespace-nowrap",
                     searchQuery === item && "bg-brand-emerald/10 border-brand-emerald/30 text-brand-emerald shadow-[0_0_15px_rgba(52,211,153,0.15)]"
                   )}
                 >
@@ -804,6 +803,8 @@ export default function App() {
                 </button>
               ))}
             </div>
+            <div className="absolute top-0 right-0 w-12 h-full bg-gradient-to-l from-black/80 to-transparent pointer-events-none z-10" />
+            <div className="absolute top-0 left-0 w-12 h-full bg-gradient-to-r from-black/80 to-transparent pointer-events-none z-10" />
           </div>
 
           <div className="mt-auto bg-gradient-to-r from-amber-500/10 to-transparent border-l-4 border-amber-500 p-4 rounded-r-xl flex items-center gap-4">
@@ -817,7 +818,7 @@ export default function App() {
 
         {/* Registry Stats / Results Section */}
         <motion.div variants={itemVariants} className={cn(
-          "bento-card flex-col gap-4 relative overflow-hidden min-h-0 h-full",
+          "bento-card flex-col gap-4 relative overflow-hidden min-h-0 h-auto lg:h-full",
           result ? "flex flex-1" : "flex"
         )}>
           {/* Subtle background element for visual interest */}
@@ -844,7 +845,7 @@ export default function App() {
                 onChange={(e) => setRegistrySearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleRegistrySearch()}
                 placeholder="Deep scan global databases..."
-                className="w-full bg-inner border border-inner hover:border-white/10 py-3.5 px-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-emerald/30 transition-all placeholder:text-dim/50"
+                className="w-full bg-inner border border-inner hover:border-white/10 py-3 md:py-3.5 px-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-emerald/30 transition-all placeholder:text-dim/50"
               />
               <Beaker className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-dim/50 group-focus-within:text-brand-emerald transition-colors" />
               <button 
@@ -865,23 +866,26 @@ export default function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="flex-1 flex flex-col justify-center"
+                className="flex-1 flex flex-col justify-center py-4"
               >
-                <div className="flex flex-col sm:flex-row items-baseline gap-2 mb-4">
-                  <span className="text-4xl md:text-5xl font-display font-extrabold text-brand-emerald tracking-tighter">102,482</span>
+                <div className="flex flex-col sm:flex-row items-baseline gap-2 mb-4 md:mb-6">
+                  <span className="text-3xl md:text-5xl font-display font-extrabold text-brand-emerald tracking-tighter">102,482</span>
                   <span className="text-dim text-[10px] md:text-xs font-bold uppercase tracking-widest">Verified Compounds</span>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {[
-                    { name: 'Sodium Laureth Sulfate', status: 'CAUTION' as SafetyStatus },
-                    { name: 'Aqua / Water', status: 'SAFE' as SafetyStatus },
-                    { name: 'Citric Acid', status: 'SAFE' as SafetyStatus }
+                    { name: 'Sodium Laureth Sulfate', status: 'CAUTION' as SafetyStatus, count: '12k scans' },
+                    { name: 'Aqua / Water', status: 'SAFE' as SafetyStatus, count: '8.4k scans' },
+                    { name: 'Citric Acid', status: 'SAFE' as SafetyStatus, count: '5.1k scans' }
                   ].map((item, i) => (
-                    <div key={i} className="flex justify-between items-center py-2 border-b border-inner text-xs">
-                      <span className="text-dim">{item.name}</span>
+                    <div key={i} className="flex justify-between items-center py-2 border-b border-inner text-[10px] md:text-xs group hover:bg-white/5 rounded-lg px-2 transition-colors -mx-2">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-white font-medium">{item.name}</span>
+                        <span className="text-dim text-[9px]">{item.count}</span>
+                      </div>
                       <span className={cn(
-                        "font-bold uppercase tracking-tighter",
-                        item.status === 'SAFE' ? "text-brand-emerald" : "text-amber-500"
+                        "font-bold uppercase tracking-tighter text-[9px] md:text-[10px] px-2 py-1 rounded-md",
+                        item.status === 'SAFE' ? "bg-brand-emerald/10 text-brand-emerald" : "bg-amber-500/10 text-amber-500"
                       )}>{item.status}</span>
                     </div>
                   ))}

@@ -15,7 +15,7 @@ export function getApiKey(): string | null {
   let envKey = null;
   try {
     // Try Vite's import.meta.env
-    envKey = import.meta.env.VITE_USER_GEMINI_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+    envKey = (import.meta as any).env.VITE_USER_GEMINI_KEY || (import.meta as any).env.VITE_GEMINI_API_KEY;
   } catch (e) {
     // Fallback for environments where import.meta.env is undefined
   }
