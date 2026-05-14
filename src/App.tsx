@@ -337,14 +337,14 @@ export default function App() {
               <Info className="w-5 h-5 text-brand-emerald" />
             </div>
             <div>
-              <h4 className="text-white font-bold text-sm mb-1">AI Summary</h4>
+              <h4 className="text-[var(--color-text-base)] font-bold text-sm mb-1">AI Summary</h4>
               <p className="text-dim text-sm leading-relaxed">{data.summary}</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="label-tiny m-0 text-white">Ingredient Analysis</h4>
+              <h4 className="label-tiny m-0 text-[var(--color-text-base)]">Ingredient Analysis</h4>
               <span className="text-xs font-bold bg-white/10 px-3 py-1 rounded-full">{data.ingredients?.length || 0} items detected</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -366,7 +366,7 @@ export default function App() {
                       <p className={cn(
                         "font-bold text-sm truncate mb-1",
                         ing.status === 'CAUTION' ? "text-amber-400" :
-                        ing.status === 'UNSAFE' ? "text-rose-400" : "text-white"
+                        ing.status === 'UNSAFE' ? "text-rose-400" : "text-[var(--color-text-base)]"
                       )}>{ing.name}</p>
                       <p className="text-[11px] text-dim leading-snug">{ing.explanation}</p>
                     </div>
@@ -473,7 +473,7 @@ export default function App() {
           </div>
 
           <div className="space-y-4">
-            <h4 className="label-tiny flex items-center gap-2 text-white">
+            <h4 className="label-tiny flex items-center gap-2 text-[var(--color-text-base)]">
               <History className="w-4 h-4" /> Recall History
             </h4>
             <div className="grid gap-3">
@@ -577,7 +577,7 @@ export default function App() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] lg:grid-rows-[auto_1fr] gap-3 md:gap-5 flex-1 min-h-0 overflow-y-auto lg:overflow-hidden custom-scrollbar pb-10 lg:pb-0 px-1 md:px-0"
+        className="flex flex-col lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:grid-rows-[auto_1fr] gap-3 md:gap-5 flex-1 min-h-0 overflow-y-auto lg:overflow-hidden custom-scrollbar pb-10 lg:pb-0 px-1 md:px-0"
       >
         
         {/* Scanner Section - Spans 2 rows */}
@@ -818,8 +818,8 @@ export default function App() {
 
         {/* Registry Stats / Results Section */}
         <motion.div variants={itemVariants} className={cn(
-          "bento-card flex-col gap-4 relative overflow-hidden min-h-0 h-auto lg:h-full",
-          result ? "flex flex-1" : "flex"
+          "bento-card flex-col gap-4 relative overflow-hidden min-h-0",
+          result ? "flex flex-1 h-full" : "flex h-auto lg:h-full"
         )}>
           {/* Subtle background element for visual interest */}
           {result && <div className="absolute -top-32 -right-32 w-64 h-64 bg-brand-emerald/5 rounded-full blur-[60px] pointer-events-none" />}
@@ -896,7 +896,7 @@ export default function App() {
                 key="results"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0 h-full"
+                className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0"
               >
                 {renderResults()}
               </motion.div>
