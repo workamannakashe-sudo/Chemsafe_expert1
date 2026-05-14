@@ -511,12 +511,12 @@ export default function App() {
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-brand-emerald/15 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse-glow" />
       
       {/* Header */}
-      <header className="mb-6 md:mb-8 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-brand-emerald-dark rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(52,211,153,0.3)] shrink-0">
-            <ShieldCheck className="w-6 h-6" />
+      <header className="mb-4 md:mb-8 flex justify-between items-center">
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-brand-emerald-dark rounded-xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(52,211,153,0.3)] shrink-0">
+            <ShieldCheck className="w-5 h-5 md:w-6 md:h-6" />
           </div>
-          <h1 className="hidden sm:block text-xl md:text-2xl font-display font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-brand-emerald bg-clip-text text-transparent">
+          <h1 className="text-lg md:text-2xl font-display font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-brand-emerald bg-clip-text text-transparent">
             ChemSafe<span className="text-brand-emerald">Expert</span>
           </h1>
         </div>
@@ -550,29 +550,29 @@ export default function App() {
 
       {/* Warning if API Key is missing */}
       {isApiKeyMissing && (
-        <div className="mb-6 p-5 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex flex-col md:flex-row items-start md:items-center gap-4 text-amber-400">
-          <div className="flex items-center gap-3">
-            <AlertTriangle className="w-6 h-6 shrink-0" />
-            <p className="text-sm font-bold uppercase tracking-wider">Intelligence Offline</p>
+        <div className="mb-4 md:mb-6 p-3 md:p-5 rounded-2xl md:rounded-3xl bg-amber-500/10 border border-amber-500/20 flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4 text-amber-400">
+          <div className="flex items-center gap-2 md:gap-3">
+            <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 shrink-0" />
+            <p className="text-xs md:text-sm font-bold uppercase tracking-wider">Intelligence Offline</p>
           </div>
           <div className="flex-1">
-            <p className="text-xs leading-relaxed">
+            <p className="text-[10px] md:text-xs leading-relaxed">
               Real-time AI analysis requires a Gemini API key. {isDemoMode ? "Currently running in DEMO MODE." : "Please add your key in settings to unlock full capabilities."}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full md:w-auto mt-2 md:mt-0">
             <button 
               onClick={() => setIsDemoMode(!isDemoMode)}
               className={cn(
-                "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
-                isDemoMode ? "bg-amber-500/20 text-amber-500 hover:bg-amber-500/30" : "bg-white/10 hover:bg-white/20 text-white"
+                "flex-1 md:flex-none px-3 py-2 rounded-xl text-[10px] md:text-xs font-bold transition-all whitespace-nowrap",
+                isDemoMode ? "bg-amber-500/20 text-amber-500 hover:bg-amber-500/30" : "bg-white/10 hover:bg-white/20 text-[var(--color-text-base)]"
               )}
             >
               {isDemoMode ? "DISABLE DEMO" : "ENABLE DEMO"}
             </button>
             <button 
               onClick={() => setShowSettings(true)}
-              className="px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+              className="flex-1 md:flex-none px-3 py-2 rounded-xl text-[10px] md:text-xs font-bold transition-all whitespace-nowrap bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.4)]"
             >
               ADD KEY
             </button>
@@ -916,27 +916,27 @@ export default function App() {
 
       {/* Bottom Navigation for Mobile */}
       {!result && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#020617]/90 backdrop-blur-xl border-t border-white/10 z-50 px-4 py-3 pb-6 flex justify-around items-center">
+        <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm bg-[#020617]/80 backdrop-blur-2xl border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.5)] z-50 px-2 py-2 rounded-3xl flex justify-between items-center">
           <button 
             onClick={() => setActiveTab('scanner')} 
-            className={cn("flex flex-col items-center gap-1.5 p-2 px-6 rounded-2xl transition-all", activeTab === 'scanner' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
+            className={cn("flex-1 flex flex-col items-center gap-1 p-2 rounded-2xl transition-all", activeTab === 'scanner' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
           >
             <Scan className="w-5 h-5" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">Scanner</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5">Scan</span>
           </button>
           <button 
             onClick={() => setActiveTab('search')} 
-            className={cn("flex flex-col items-center gap-1.5 p-2 px-6 rounded-2xl transition-all", activeTab === 'search' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
+            className={cn("flex-1 flex flex-col items-center gap-1 p-2 rounded-2xl transition-all", activeTab === 'search' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
           >
             <Search className="w-5 h-5" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">Search</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5">Search</span>
           </button>
           <button 
             onClick={() => setActiveTab('registry')} 
-            className={cn("flex flex-col items-center gap-1.5 p-2 px-6 rounded-2xl transition-all", activeTab === 'registry' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
+            className={cn("flex-1 flex flex-col items-center gap-1 p-2 rounded-2xl transition-all", activeTab === 'registry' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
           >
             <Database className="w-5 h-5" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">Registry</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5">Data</span>
           </button>
         </div>
       )}
