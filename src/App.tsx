@@ -20,7 +20,9 @@ import {
   Moon,
   Settings,
   Key,
-  Leaf
+  Leaf,
+  Database,
+  LayoutDashboard
 } from 'lucide-react';
 import { cn } from './lib/utils';
 import { ScannerOverlay } from './components/ScannerOverlay';
@@ -58,6 +60,7 @@ export default function App() {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [registrySearchQuery, setRegistrySearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'scanner' | 'search' | 'registry'>('scanner');
   const [result, setResult] = useState<ProductAnalysis | ChemicalInfo | BrandIntelligence | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDemoMode, setIsDemoMode] = useState(false);
@@ -254,8 +257,7 @@ export default function App() {
           reputationStatus: "SAFE",
           summary: `This is simulated brand data for "${query}". real brand intelligence requires an active API key.`,
           recallHistory: [],
-          manufacturingStandards: "Simulated high standards",
-          ingredients: []
+          manufacturingStandards: "Simulated high standards"
         } as BrandIntelligence);
         return;
       }
@@ -311,7 +313,7 @@ export default function App() {
 
     // Type guards
     const isProduct = 'ingredients' in result;
-    const isChemical = 'formula' in result;
+    const isChemical = 'name' in result || 'safetyVerdict' in result;
     const isBrand = 'brandName' in result && !isProduct;
 
     if (isProduct) {
@@ -398,17 +400,15 @@ export default function App() {
     if (isChemical) {
       const data = result as ChemicalInfo;
       return (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-6"
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-display font-bold leading-tight">{data.name}</h2>
-              {data.formula && <p className="text-brand-emerald font-mono text-sm bg-brand-emerald/10 inline-block px-3 py-1 rounded-full mt-2">{data.formula}</p>}
+        <div className="space-y-6 pb-20 lg:pb-6 relative z-10">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-display font-bold leading-tight">{data.name}</h2>
+                {data.formula && <p className="text-brand-emerald text-sm md:text-base font-mono mt-1 px-3 py-1 bg-brand-emerald/10 inline-block rounded-lg">{data.formula}</p>}
+              </div>
+              <SafetyBadge status={data.safetyVerdict} className="scale-110 origin-top-right" />
             </div>
-            <SafetyBadge status={data.safetyVerdict} className="scale-110 origin-top-right" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -450,7 +450,7 @@ export default function App() {
               </div>
             </div>
           )}
-        </motion.div>
+        </div>
       );
     }
 
@@ -494,7 +494,15 @@ export default function App() {
       );
     }
 
-    return null;
+    return (
+      <div className="p-4 border border-white/10 rounded-xl bg-white/5 space-y-4">
+        <h4 className="text-[var(--color-text-base)] font-bold text-sm">Raw Analysis Data</h4>
+        <p className="text-xs text-dim">The AI returned an unexpected format. Here is the raw data:</p>
+        <pre className="text-[10px] text-dim overflow-x-auto whitespace-pre-wrap">
+          {JSON.stringify(result, null, 2)}
+        </pre>
+      </div>
+    );
   };
 
   return (
@@ -572,18 +580,18 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Bento Grid */}
+      {/* Main Bento Grid / Tabbed Views */}
       <motion.main 
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="flex flex-col lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:grid-rows-[auto_1fr] gap-3 md:gap-5 flex-1 min-h-0 overflow-y-auto lg:overflow-hidden custom-scrollbar pb-10 lg:pb-0 px-1 md:px-0"
+        className="flex flex-col lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:grid-rows-[auto_1fr] gap-3 md:gap-5 flex-1 min-h-0 overflow-y-auto lg:overflow-hidden custom-scrollbar pb-24 lg:pb-0 px-1 md:px-0"
       >
         
-        {/* Scanner Section - Spans 2 rows */}
+        {/* Scanner Section */}
         <motion.div variants={itemVariants} className={cn(
-          "bento-card scanner-view lg:row-span-2 border-2 bg-black flex-col justify-between p-0 overflow-hidden relative min-h-[35vh] lg:min-h-0 h-auto lg:h-full",
-          result ? "hidden lg:flex" : "flex",
+          "bento-card scanner-view lg:row-span-2 border-2 bg-black flex-col justify-between p-0 overflow-hidden relative min-h-[50vh] lg:min-h-0 h-auto lg:h-full",
+          result ? "hidden" : activeTab === 'scanner' ? "flex" : "hidden lg:flex",
           isCameraActive ? "border-brand-emerald/60 shadow-[0_0_40px_rgba(52,211,153,0.1)]" : "border-brand-emerald/40"
         )}>
           {/* Pulsing Border for Active Scan */}
@@ -754,7 +762,7 @@ export default function App() {
         {/* Search & Trending Section */}
         <motion.div variants={itemVariants} className={cn(
           "bento-card search-section flex-col gap-4",
-          result ? "hidden lg:flex" : "flex"
+          result ? "hidden" : activeTab === 'search' ? "flex" : "hidden lg:flex"
         )}>
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -819,7 +827,7 @@ export default function App() {
         {/* Registry Stats / Results Section */}
         <motion.div variants={itemVariants} className={cn(
           "bento-card flex-col gap-4 relative overflow-hidden min-h-0",
-          result ? "flex flex-1 h-full" : "flex h-auto lg:h-full"
+          result ? "flex flex-1 lg:col-span-2 lg:row-span-2" : activeTab === 'registry' ? "flex flex-1 lg:h-full" : "hidden lg:flex lg:flex-1 lg:h-full"
         )}>
           {/* Subtle background element for visual interest */}
           {result && <div className="absolute -top-32 -right-32 w-64 h-64 bg-brand-emerald/5 rounded-full blur-[60px] pointer-events-none" />}
@@ -880,7 +888,7 @@ export default function App() {
                   ].map((item, i) => (
                     <div key={i} className="flex justify-between items-center py-2 border-b border-inner text-[10px] md:text-xs group hover:bg-white/5 rounded-lg px-2 transition-colors -mx-2">
                       <div className="flex flex-col gap-0.5">
-                        <span className="text-white font-medium">{item.name}</span>
+                        <span className="text-[var(--color-text-base)] font-medium">{item.name}</span>
                         <span className="text-dim text-[9px]">{item.count}</span>
                       </div>
                       <span className={cn(
@@ -906,8 +914,35 @@ export default function App() {
 
       </motion.main>
 
+      {/* Bottom Navigation for Mobile */}
+      {!result && (
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#020617]/90 backdrop-blur-xl border-t border-white/10 z-50 px-4 py-3 pb-6 flex justify-around items-center">
+          <button 
+            onClick={() => setActiveTab('scanner')} 
+            className={cn("flex flex-col items-center gap-1.5 p-2 px-6 rounded-2xl transition-all", activeTab === 'scanner' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
+          >
+            <Scan className="w-5 h-5" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Scanner</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('search')} 
+            className={cn("flex flex-col items-center gap-1.5 p-2 px-6 rounded-2xl transition-all", activeTab === 'search' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
+          >
+            <Search className="w-5 h-5" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Search</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('registry')} 
+            className={cn("flex flex-col items-center gap-1.5 p-2 px-6 rounded-2xl transition-all", activeTab === 'registry' ? "bg-brand-emerald/10 text-brand-emerald" : "text-dim hover:text-white")}
+          >
+            <Database className="w-5 h-5" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Registry</span>
+          </button>
+        </div>
+      )}
+
       {/* Footer */}
-      <footer className="mt-8 py-4 border-t border-white/5 flex justify-between items-center text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">
+      <footer className="hidden lg:flex mt-8 py-4 border-t border-white/5 justify-between items-center text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">
         <span>&copy; 2026 CHEMSAFE INTELLIGENCE SYS</span>
         <div className="flex gap-6">
           <span>Privacy</span>
